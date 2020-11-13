@@ -1,2 +1,3 @@
-# ScreenDataUI-ios
+# ScreenDataUI
+
 SwiftUI Views for ScreenData

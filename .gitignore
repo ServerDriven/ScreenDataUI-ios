@@ -1,0 +1,4 @@
+
+*.
+/ScreenDataUI.xcodeproj/
+/Package.resolved
