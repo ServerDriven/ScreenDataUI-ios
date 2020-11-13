@@ -32,9 +32,3 @@ public struct SDLabel: SwiftUI.View {
         )
     }
 }
-
-struct SDLabel_Previews: PreviewProvider {
-    static var previews: some SwiftUI.View {
-        SDLabel(label: .init(title: "Some Title", subtitle: "Subtitle...", style: .init(backgroundColor: .init(red: 255, green: 255, blue: 0, alpha: 255), isHidden: false), destination: Destination(type: .screen, screen: ScreenDestination(screenID: "3"), url: nil, deepLink: nil)))
-    }
-}

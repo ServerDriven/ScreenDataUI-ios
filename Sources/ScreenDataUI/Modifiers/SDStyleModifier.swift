@@ -17,12 +17,12 @@ public struct SDStyleModifier: ViewModifier {
                 content.hidden()
             } else {
                 content
+                    .background(
+                    style.backgroundColor.map {
+                        AnyView(SDColor(color: $0))
+                        } ?? AnyView(Color.clear)
+                )
             }
         }
-        .background(
-            style.backgroundColor.map {
-                AnyView(SDColor(color: $0))
-                } ?? AnyView(Color.clear)
-        )
     }
 }

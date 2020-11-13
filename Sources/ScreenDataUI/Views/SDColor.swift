@@ -17,16 +17,10 @@ public struct SDColor: SwiftUI.View {
     
     public var body: some SwiftUI.View {
         SwiftUI.Color(
-            UIColor(red: CGFloat(color.red),
-                    green: CGFloat(color.green),
-                    blue: CGFloat(color.blue),
-                    alpha: CGFloat(color.alpha))
+            UIColor(red: CGFloat(color.red) / 255.0,
+                    green: CGFloat(color.green) / 255.0,
+                    blue: CGFloat(color.blue) / 255.0,
+                    alpha: CGFloat(color.alpha) / 255.0)
         )
-    }
-}
-
-struct SDColor_Previews: PreviewProvider {
-    static var previews: some SwiftUI.View {
-        SDColor(color: ScreenData.Color(red: 50, green: 100, blue: 255))
     }
 }
