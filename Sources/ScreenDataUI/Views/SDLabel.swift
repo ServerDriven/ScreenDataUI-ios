@@ -11,6 +11,10 @@ import ScreenData
 public struct SDLabel: SwiftUI.View {
     public var label: ScreenData.Label
     
+    public init(label: ScreenData.Label) {
+        self.label = label
+    }
+    
     public var body: some SwiftUI.View {
         VStack {
             // Title

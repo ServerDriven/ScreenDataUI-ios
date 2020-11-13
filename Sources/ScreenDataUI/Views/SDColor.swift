@@ -11,6 +11,10 @@ import ScreenData
 public struct SDColor: SwiftUI.View {
     public var color: ScreenData.Color
     
+    public init(color: ScreenData.Color) {
+        self.color = color
+    }
+    
     public var body: some SwiftUI.View {
         SwiftUI.Color(
             UIColor(red: CGFloat(color.red),
