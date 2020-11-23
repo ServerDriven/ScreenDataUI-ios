@@ -9,9 +9,9 @@ import SwiftUI
 import ScreenData
 
 public struct SDStyleModifier: ViewModifier {
-    public var style: ScreenData.Style
+    public var style: SomeStyle
     
-    public func body(content: Content) -> some SwiftUI.View {
+    public func body(content: Content) -> some View {
         Group {
             if style.isHidden {
                 content.hidden()

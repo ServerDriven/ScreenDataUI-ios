@@ -8,15 +8,15 @@
 import SwiftUI
 import ScreenData
 
-public struct SDColor: SwiftUI.View {
-    public var color: ScreenData.Color
+public struct SDColor: View {
+    public var color: SomeColor
     
-    public init(color: ScreenData.Color) {
+    public init(color: SomeColor) {
         self.color = color
     }
     
-    public var body: some SwiftUI.View {
-        SwiftUI.Color(
+    public var body: some View {
+        Color(
             UIColor(red: CGFloat(color.red) / 255.0,
                     green: CGFloat(color.green) / 255.0,
                     blue: CGFloat(color.blue) / 255.0,

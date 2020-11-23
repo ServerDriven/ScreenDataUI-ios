@@ -8,27 +8,29 @@
 import SwiftUI
 import ScreenData
 
-public struct SDLabel: SwiftUI.View {
-    public var label: ScreenData.Label
+public struct SDLabel: View {
+    public var label: SomeLabel
     
-    public init(label: ScreenData.Label) {
+    public init(label: SomeLabel) {
         self.label = label
     }
     
-    public var body: some SwiftUI.View {
+    public var body: some View {
+        mainView
+    }
+    
+    private var mainView: some View {
         VStack {
             // Title
-            SwiftUI.Text(label.title)
+            Text(label.title)
                 .font(.title)
-
+            
             // Subtitle
             label.subtitle.map {
-                SwiftUI.Text($0)
+                Text($0)
                     .font(.headline)
             }
         }
-        .background(with:
-            label.style ?? ScreenData.Style()
-        )
+        .background(with: label.style)
     }
 }
