@@ -10,14 +10,19 @@ import ScreenData
 import ScreenDataNavigation
 
 public struct SDLabel: View {
+    public var provider: ScreenProviding
     public var label: SomeLabel
     
-    public init(label: SomeLabel) {
+    public init(
+        provider: ScreenProviding = MockScreenProvider(mockScreen: SomeScreen(title: "Some Title", subtitle: "Some Sub Title", backgroundColor: SomeColor(red: 255, green: 255, blue: 255), someView: SomeLabel(title: "Hello, World!").someView)),
+        label: SomeLabel
+    ) {
+        self.provider = provider
         self.label = label
     }
     
     public var body: some View {
-        SDDestinationLink(provider: MockScreenProvider(mockScreen: SomeScreen(title: "Some Title", subtitle: "Some Sub Title", backgroundColor: SomeColor(red: 255, green: 255, blue: 255), someView: SomeLabel(title: "Hello, World!").someView)), destination: label.destination) {
+        SDDestinationLink(provider: provider, destination: label.destination) {
             VStack {
                 // Title
                 Text(label.title)

@@ -19,6 +19,7 @@ public struct SDImage: View {
         AsyncImage(url: URL(string: image.url)!) {
             Text("Loading...")
         }
-            .background(with: image.style)
+        .aspectRatio(contentMode: .fit)
+        .background(with: image.style)
     }
 }
