@@ -20,9 +20,11 @@ public extension SomeView {
         case .labeledImage:
             return AnyView(SDLabeledImage(labeledImage: someLabeledImage!))
         case .container:
-            return AnyView(SDContainerView(container: container!))
+            return AnyView(SDContainerView(container: someContainer!))
         case .image:
             return AnyView(SDImage(image: someImage!))
+        case .spacer:
+            return AnyView(Spacer())
         case .custom:
             return AnyView(Text("404")) // TODO: Handle Custom Views
         }

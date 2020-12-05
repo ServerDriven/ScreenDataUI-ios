@@ -39,7 +39,7 @@ public extension SomeCustomView {
 
 public extension SomeContainerView {
     var someView: SomeView {
-        SomeView(type: .container, container: self)
+        SomeView(type: .container, someContainer: self)
     }
 }
 
