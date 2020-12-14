@@ -27,11 +27,13 @@ public struct SDLabel: View {
                 // Title
                 Text(label.title)
                     .font(.title)
+                    .alignmentGuide(.leading) { d in d[.leading] }
                 
                 // Subtitle
                 label.subtitle.map {
                     Text($0)
                         .font(.headline)
+                        .alignmentGuide(.leading) { d in d[.leading] }
                 }
             }
             .background(with: label.style)
