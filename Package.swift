@@ -17,7 +17,7 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(name: "ScreenData", url: "https://github.com/ServerDriven/ScreenData-swift", from: "0.2.0"),
+        .package(name: "ScreenData", url: "https://github.com/ServerDriven/ScreenData-swift", .branch("develop")),
         .package(name: "ScreenDataNavigation", url: "https://github.com/ServerDriven/ScreenDataNavigation-swift", .branch("main"))
     ],
     targets: [
