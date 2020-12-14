@@ -27,7 +27,7 @@ public struct SDLabel: View {
                 // Title
                 Text(label.title)
                     .font(.title)
-                    .multilineTextAlignment(.leading)
+                    .multilineTextAlignment(label.destination.map { _ in .center } ?? .leading)
                 
                 // Subtitle
                 label.subtitle.map {
