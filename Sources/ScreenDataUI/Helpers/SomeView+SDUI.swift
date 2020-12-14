@@ -24,7 +24,7 @@ public extension SomeView {
         case .image:
             return AnyView(SDImage(image: someImage!))
         case .spacer:
-            return AnyView(Spacer())
+            return AnyView(Spacer(minLength: (someSpacer?.size).map { CGFloat($0) }))
         case .custom:
             return AnyView(Text("404")) // TODO: Handle Custom Views
         }
