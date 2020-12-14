@@ -14,7 +14,7 @@ public struct SDLabel: View {
     public var label: SomeLabel
     
     public init(
-        provider: ScreenProviding = MockScreenProvider(mockScreen: SomeScreen(title: "Some Title", subtitle: "Some Sub Title", backgroundColor: SomeColor(red: 255, green: 255, blue: 255), someView: SomeLabel(title: "Hello, World!").someView)),
+        provider: ScreenProviding = MockScreenProvider(mockScreen: SomeScreen(title: "Some Title", subtitle: "Some Sub Title", backgroundColor: SomeColor(red: 1, green: 1, blue: 1), someView: SomeLabel(title: "Hello, World!").someView)),
         label: SomeLabel
     ) {
         self.provider = provider
@@ -27,15 +27,18 @@ public struct SDLabel: View {
                 // Title
                 Text(label.title)
                     .font(.title)
-                    .alignmentGuide(.leading) { d in d[.leading] }
+                    .multilineTextAlignment(.center)
                 
                 // Subtitle
                 label.subtitle.map {
                     Text($0)
                         .font(.headline)
-                        .alignmentGuide(.leading) { d in d[.leading] }
+                        .multilineTextAlignment(.center)
                 }
             }
+            .frame(minWidth: 44,
+                   maxWidth: .infinity,
+                   alignment: .center)
             .background(with: label.style)
         }
     }
