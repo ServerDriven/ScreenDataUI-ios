@@ -38,7 +38,7 @@ public struct SDLabel: View {
             }
             .frame(minWidth: 44,
                    maxWidth: .infinity,
-                   alignment: .center)
+                   alignment: .leading)
             .background(with: label.style)
         }
     }
