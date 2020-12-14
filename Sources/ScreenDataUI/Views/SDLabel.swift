@@ -27,13 +27,13 @@ public struct SDLabel: View {
                 // Title
                 Text(label.title)
                     .font(.title)
-                    .multilineTextAlignment(.center)
+                    .multilineTextAlignment(.leading)
                 
                 // Subtitle
                 label.subtitle.map {
                     Text($0)
                         .font(.headline)
-                        .multilineTextAlignment(.center)
+                        .multilineTextAlignment(.leading)
                 }
             }
             .frame(minWidth: 44,
