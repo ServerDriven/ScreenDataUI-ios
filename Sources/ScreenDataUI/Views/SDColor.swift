@@ -17,10 +17,10 @@ public struct SDColor: View {
     
     public var body: some View {
         Color(
-            UIColor(red: CGFloat(color.red) / 255.0,
-                    green: CGFloat(color.green) / 255.0,
-                    blue: CGFloat(color.blue) / 255.0,
-                    alpha: CGFloat(color.alpha) / 255.0)
+            UIColor(red: CGFloat(color.red),
+                    green: CGFloat(color.green),
+                    blue: CGFloat(color.blue),
+                    alpha: CGFloat(color.alpha))
         )
     }
 }

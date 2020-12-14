@@ -17,12 +17,16 @@ public struct SDStyleModifier: ViewModifier {
         } else {
             return AnyView(
                 content
+                    .padding(CGFloat(style.padding))
                     .background(
                         style.backgroundColor.map {
                             AnyView(SDColor(color: $0))
                         } ?? AnyView(Color.clear)
                     )
                     .cornerRadius(CGFloat(style.cornerRadius))
+                    .foregroundColor(style.foregroundColor.map {
+                        SDColor(color: $0).body as? Color
+                    } ?? Color.primary)
             )
         }
         

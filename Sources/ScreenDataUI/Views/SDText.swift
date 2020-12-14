@@ -18,5 +18,6 @@ public struct SDText: View {
     public var body: some View {
         Text(text.title)
             .background(with: text.style)
+        
     }
 }

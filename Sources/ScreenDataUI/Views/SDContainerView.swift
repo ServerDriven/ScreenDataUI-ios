@@ -33,5 +33,6 @@ public struct SDContainerView: View {
                 }
             }
         }
+        .background(with: container.style)
     }
 }
