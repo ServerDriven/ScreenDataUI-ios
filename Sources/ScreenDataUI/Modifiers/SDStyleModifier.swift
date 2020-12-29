@@ -13,7 +13,11 @@ public struct SDStyleModifier: ViewModifier {
     
     public func body(content: Content) -> some View {
         if style.isHidden {
-            return AnyView(content.hidden())
+            return AnyView(
+                content
+                    .hidden()
+                    .frame(width: 0, height: 0, alignment: .center)
+            )
         } else {
             return AnyView(
                 content
