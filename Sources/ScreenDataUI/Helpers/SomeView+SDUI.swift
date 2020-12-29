@@ -26,7 +26,7 @@ public extension SomeView {
         case .spacer:
             return AnyView(Spacer(minLength: (someSpacer?.size).map { CGFloat($0) }))
         case .custom:
-            return AnyView(Text("404")) // TODO: Handle Custom Views
+            return AnyView(SDCustomView(custom: someCustomView!))
         }
     }
 }
