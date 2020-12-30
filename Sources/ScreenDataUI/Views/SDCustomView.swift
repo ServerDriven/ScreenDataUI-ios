@@ -29,7 +29,11 @@ public struct SDCustomView: View {
     public var body: some View {
         guard let id = custom.id,
               let customView = SDCustomView.customViews[id] else {
-            return AnyView(Text("404"))
+            return AnyView(
+                Text("404")
+                    .font(.title)
+                    .foregroundColor(.red)
+            )
         }
         
         return customView.view(forSomeCustomView: custom)
