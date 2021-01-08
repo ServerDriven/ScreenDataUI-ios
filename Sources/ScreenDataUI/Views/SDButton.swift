@@ -27,8 +27,6 @@ public struct SDButton: View {
     
     public init(button: SomeButton) {
         self.button = button
-        
-        store.load(destination: button.destination, provider: SDScreenProvider())
     }
     
     public var body: some View {
@@ -48,6 +46,9 @@ public struct SDButton: View {
         }
         .sheet(item: $modalScreen) { (destination) in
             destination
+        }
+        .onAppear {
+            store.load(destination: button.destination, provider: SDScreenProvider())
         }
     }
 }
