@@ -27,8 +27,18 @@ public struct SDButton: View {
     }
     
     public var body: some View {
-        SDDestinationLink(provider: SDScreenProvider(), destination: button.destination) {
-            SDButton(button: button)
+        Button(action: {
+            print("[SDButton] ActionID: \(String(describing: button.actionID)) & Destination: \(String(describing: button.destination))")
+            if let actionID = button.actionID,
+               let action = SDButton.actions[actionID] {
+                action()
+            }
+            
+            if let destination = button.destination {
+                print("TODO: Navigate to destination")
+            }
+        }) {
+            Text(button.title)
         }
     }
 }
