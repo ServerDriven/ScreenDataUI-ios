@@ -19,7 +19,7 @@ public struct SDLabel: View {
     }
     
     public var body: some View {
-        SDDestinationLink(provider: SDScreenProvider.provider, destination: label.destination) {
+        SDDestinationLink(provider: SDScreenProvider(), destination: label.destination) {
             VStack {
                 // Title
                 Text(label.title)

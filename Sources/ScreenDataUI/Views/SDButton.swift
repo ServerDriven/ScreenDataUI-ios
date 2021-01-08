@@ -27,7 +27,7 @@ public struct SDButton: View {
     }
     
     public var body: some View {
-        SDDestinationLink(provider: SDScreenProvider.provider, destination: button.destination) {
+        SDDestinationLink(provider: SDScreenProvider(), destination: button.destination) {
             SDButton(button: button)
         }
     }
