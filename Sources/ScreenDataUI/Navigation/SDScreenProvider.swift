@@ -10,10 +10,10 @@ import ScreenData
 import ScreenDataNavigation
 import Combine
 
-struct SDScreenProvider: ScreenProviding {
-    static var `default`: ScreenProviding?
+public struct SDScreenProvider: ScreenProviding {
+    public static var `default`: ScreenProviding?
     
-    func screen(forID id: String) -> Future<SomeScreen, Error> {
+    public func screen(forID id: String) -> Future<SomeScreen, Error> {
         guard let provider = SDScreenProvider.default else {
             return ScreenDataNavigation.MockScreenProvider(mockScreen:
                                                             SomeScreen(title: "404",

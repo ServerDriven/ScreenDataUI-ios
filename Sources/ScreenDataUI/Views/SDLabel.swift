@@ -10,8 +10,6 @@ import ScreenData
 import ScreenDataNavigation
 
 public struct SDLabel: View {
-    public static var provider: ScreenProviding = SDScreenProvider()
-    
     public var label: SomeLabel
     
     public init(
@@ -21,7 +19,7 @@ public struct SDLabel: View {
     }
     
     public var body: some View {
-        SDDestinationLink(provider: SDLabel.provider, destination: label.destination) {
+        SDDestinationLink(provider: SDScreenProvider.provider, destination: label.destination) {
             VStack {
                 // Title
                 Text(label.title)

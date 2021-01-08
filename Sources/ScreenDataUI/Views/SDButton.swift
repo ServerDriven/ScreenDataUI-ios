@@ -12,8 +12,6 @@ import ScreenDataNavigation
 public typealias SDAction = () -> Void
 
 public struct SDButton: View {
-    public static var provider: ScreenProviding = SDScreenProvider()
-    
     public static var actions: [String: SDAction] = [:]
     public static func add(
         actionWithID actionID: String,
@@ -29,7 +27,7 @@ public struct SDButton: View {
     }
     
     public var body: some View {
-        SDDestinationLink(provider: SDButton.provider, destination: button.destination) {
+        SDDestinationLink(provider: SDScreenProvider.provider, destination: button.destination) {
             SDButton(button: button)
         }
     }
