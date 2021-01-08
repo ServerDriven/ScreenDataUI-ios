@@ -7,10 +7,13 @@
 
 import SwiftUI
 import ScreenData
+import ScreenDataNavigation
 
 public typealias SDAction = () -> Void
 
 public struct SDButton: View {
+    public static var provider: ScreenProviding = SDScreenProvider()
+    
     public static var actions: [String: SDAction] = [:]
     public static func add(
         actionWithID actionID: String,
@@ -26,19 +29,8 @@ public struct SDButton: View {
     }
     
     public var body: some View {
-        Button(action: {
-            print("[SDButton] ActionID: \(String(describing: button.actionID)) & Destination: \(String(describing: button.destination))")
-            if let actionID = button.actionID,
-               let action = SDButton.actions[actionID] {
-                action()
-            }
-            
-            if let destination = button.destination {
-                print("TODO: Navigate to destination")
-            }
-        }) {
-            Text(button.title)
+        SDDestinationLink(provider: SDButton.provider, destination: button.destination) {
+            SDButton(button: button)
         }
-        .background(with: button.style)
     }
 }
