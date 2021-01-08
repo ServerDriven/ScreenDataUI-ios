@@ -15,6 +15,10 @@ public class SDDestinationStore: ObservableObject {
     
     private var task: AnyCancellable?
     
+    deinit {
+        task?.cancel()
+    }
+    
     public func load(destination: Destination?, provider: ScreenProviding) {
         guard destinationView == nil else {
             return
@@ -27,8 +31,8 @@ public class SDDestinationStore: ObservableObject {
         task = provider.screen(forID: destination.toID)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { _ in },
-                  receiveValue: { (screen) in
-                    self.destinationView = SDScreen(screen: screen)
+                  receiveValue: { [weak self] (screen) in
+                    self?.destinationView = SDScreen(screen: screen)
                   })
     }
 }
