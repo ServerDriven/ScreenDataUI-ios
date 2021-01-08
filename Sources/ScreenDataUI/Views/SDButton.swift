@@ -37,12 +37,13 @@ public struct SDButton: View {
                 action()
             }
             
-            if button.destination != nil {
-                print("TODO: Navigate to destination")
+            if let destination = button.destination {
+                print("Navigate to destination: (\(destination))")
                 modalScreen = store.destinationView
             }
         }) {
             Text(button.title)
+                .background(with: button.style)
         }
         .sheet(item: $modalScreen) { (destination) in
             destination
