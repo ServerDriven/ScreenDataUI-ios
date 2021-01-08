@@ -24,7 +24,13 @@ public extension SomeView {
         case .image:
             return AnyView(SDImage(image: someImage!))
         case .spacer:
-            return AnyView(Spacer(minLength: (someSpacer?.size).map { CGFloat($0) }))
+            guard let size = someSpacer?.size else {
+                return AnyView(Spacer())
+            }
+            
+            return AnyView(Spacer().frame(width: CGFloat(size),
+                                          height: CGFloat(size),
+                                          alignment: .center))
         case .custom:
             return AnyView(SDCustomView(custom: someCustomView!))
         }
