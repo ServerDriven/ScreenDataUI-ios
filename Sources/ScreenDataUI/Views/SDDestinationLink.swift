@@ -10,9 +10,36 @@ import Combine
 import ScreenData
 import ScreenDataNavigation
 
+public class SDDestinationStore: ObservableObject {
+    @Published public var destinationView: SDScreen?
+    
+    private var task: AnyCancellable?
+    
+    deinit {
+        task?.cancel()
+    }
+    
+    public func load(destination: Destination?, provider: ScreenProviding) {
+        guard destinationView == nil else {
+            return
+        }
+        
+        guard let destination = destination else {
+            return
+        }
+        
+        task = provider.screen(forID: destination.toID)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { _ in },
+                  receiveValue: { [weak self] (screen) in
+                    self?.destinationView = SDScreen(screen: screen)
+                  })
+    }
+}
+
 public struct SDDestinationLink<Content>: View where Content: View {
-    @State private var task: AnyCancellable?
-    @State private var destinationView: SDScreen?
+    @StateObject private var store: SDDestinationStore = SDDestinationStore()
+    
     public var provider: ScreenProviding
     
     public var destination: Destination?
@@ -33,7 +60,7 @@ public struct SDDestinationLink<Content>: View where Content: View {
             return AnyView(content())
         }
         
-        guard let destinationView = destinationView else {
+        guard let destinationView = store.destinationView else {
             return AnyView(loadingView)
         }
         
@@ -52,12 +79,8 @@ public struct SDDestinationLink<Content>: View where Content: View {
         
         return AnyView(ProgressView()
                         .onAppear {
-                            task = provider.screen(forID: destination.toID)
-                                .receive(on: DispatchQueue.main)
-                                .sink(receiveCompletion: { _ in },
-                                      receiveValue: { (screen) in
-                                        self.destinationView = SDScreen(screen: screen)
-                                      })
+                            store.load(destination: destination,
+                                       provider: provider)
                         })
     }
 }

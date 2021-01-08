@@ -18,7 +18,10 @@ public struct SDLabeledImage: View {
     public var body: some View {
         VStack {
             SDImage(image: labeledImage.someImage)
-            SDLabel(label: SomeLabel(title: labeledImage.title, subtitle: labeledImage.subtitle))
+            SDLabel(label: SomeLabel(title: labeledImage.title, style: labeledImage.style))
+            if let subtitle = labeledImage.subtitle {
+                SDText(text: SomeText(title: subtitle, style: labeledImage.style))
+            }
         }
         .background(with: labeledImage.style)
     }

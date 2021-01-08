@@ -9,6 +9,7 @@ import SwiftUI
 import ScreenData
 
 public struct SDScreen: View {
+    public let id = UUID()
     public var screen: SomeScreen
     
     public init(screen: SomeScreen) {
@@ -17,8 +18,6 @@ public struct SDScreen: View {
     
     public var body: some View {
         VStack {
-            SDLabel(label: SomeLabel(title: screen.title, subtitle: screen.subtitle))
-            
             if let headerView = screen.headerView {
                 headerView.ui
             }
@@ -29,5 +28,12 @@ public struct SDScreen: View {
                 footerView.ui
             }
         }
+        .background(Color(red: Double(screen.backgroundColor.red),
+                           green: Double(screen.backgroundColor.green),
+                           blue: Double(screen.backgroundColor.blue),
+                           opacity: Double(screen.backgroundColor.alpha)))
+        .navigationBarTitle(screen.title)
     }
 }
+
+extension SDScreen: Identifiable { }
