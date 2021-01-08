@@ -9,6 +9,7 @@ import SwiftUI
 import ScreenData
 
 public struct SDScreen: View {
+    public let id = UUID()
     public var screen: SomeScreen
     
     public init(screen: SomeScreen) {
@@ -34,3 +35,5 @@ public struct SDScreen: View {
         .navigationBarTitle(screen.title)
     }
 }
+
+extension SDScreen: Identifiable { }

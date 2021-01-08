@@ -20,10 +20,15 @@ public struct SDButton: View {
         actions[actionID] = action
     }
     
+    @StateObject private var store: SDDestinationStore = SDDestinationStore()
+    @State private var modalScreen: SDScreen?
+    
     public var button: SomeButton
     
     public init(button: SomeButton) {
         self.button = button
+        
+        store.load(destination: button.destination, provider: SDScreenProvider())
     }
     
     public var body: some View {
@@ -34,11 +39,15 @@ public struct SDButton: View {
                 action()
             }
             
-            if let destination = button.destination {
+            if button.destination != nil {
                 print("TODO: Navigate to destination")
+                modalScreen = store.destinationView
             }
         }) {
             Text(button.title)
+        }
+        .sheet(item: $modalScreen) { (destination) in
+            destination
         }
     }
 }
