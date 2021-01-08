@@ -16,6 +16,10 @@ public class SDDestinationStore: ObservableObject {
     private var task: AnyCancellable?
     
     public func load(destination: Destination?, provider: ScreenProviding) {
+        guard destinationView == nil else {
+            return
+        }
+        
         guard let destination = destination else {
             return
         }
