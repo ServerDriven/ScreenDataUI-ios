@@ -17,14 +17,14 @@ public struct SDScreen: View {
         self.screen = screen
         
         DispatchQueue.global().async {
-            let lock = NSLock()
+            let sema = DispatchSemaphore(value: 0)
             
             let task = SDScreenStore.default?.store(screens: [screen]).sink(receiveCompletion: { _ in }, receiveValue: { _ in
                 print("SAVED Screen")
-                lock.unlock()
+                sema.signal()
             })
             
-            lock.lock()
+            sema.wait()
             
             task?.cancel()
         }
