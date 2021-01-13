@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ScreenData
+import Combine
 
 public struct SDScreen: View {
     public let id = UUID()
@@ -14,6 +15,19 @@ public struct SDScreen: View {
     
     public init(screen: SomeScreen) {
         self.screen = screen
+        
+        DispatchQueue.global().async {
+            let lock = NSLock()
+            
+            let task = SDScreenStore.default?.store(screens: [screen]).sink(receiveCompletion: { _ in }, receiveValue: { _ in
+                print("SAVED Screen")
+                lock.unlock()
+            })
+            
+            lock.lock()
+            
+            task?.cancel()
+        }
     }
     
     public var body: some View {
