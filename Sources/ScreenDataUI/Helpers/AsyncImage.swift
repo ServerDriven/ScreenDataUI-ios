@@ -1,12 +1,12 @@
 import SwiftUI
 import Combine
 
-class ImageLoader: ObservableObject {
-    @Published var image: UIImage?
+public class ImageLoader: ObservableObject {
+    @Published public var image: UIImage?
     private let url: URL?
     private var cancellable: AnyCancellable?
     
-    init(url: URL?) {
+    public init(url: URL?) {
         self.url = url
     }
     
@@ -14,7 +14,7 @@ class ImageLoader: ObservableObject {
         cancel()
     }
     
-    func load() {
+    public func load() {
         guard let url = url else {
             return
         }
@@ -26,21 +26,21 @@ class ImageLoader: ObservableObject {
             .sink { [weak self] in self?.image = $0 }
     }
     
-    func cancel() {
+    public func cancel() {
         cancellable?.cancel()
     }
 }
 
-struct AsyncImage<Placeholder: View>: View {
+public struct AsyncImage<Placeholder: View>: View {
     @StateObject private var loader: ImageLoader
     private let placeholder: Placeholder
     
-    init(url: URL, @ViewBuilder placeholder: () -> Placeholder) {
+    public init(url: URL, @ViewBuilder placeholder: () -> Placeholder) {
         self.placeholder = placeholder()
         _loader = StateObject(wrappedValue: ImageLoader(url: url))
     }
     
-    var body: some View {
+    public var body: some View {
         content
             .onAppear(perform: loader.load)
     }
