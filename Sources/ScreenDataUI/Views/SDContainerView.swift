@@ -15,6 +15,15 @@ public struct SDContainerView: View {
         self.container = container
     }
     
+    private var scrollAxis: Axis.Set {
+        switch container.axis {
+        case .horizontal:
+            return .horizontal
+        case .vertical:
+            return .vertical
+        }
+    }
+    
     public var views: some View {
         ForEach(container.views, id: \.self) { view in
             view.ui
@@ -22,7 +31,7 @@ public struct SDContainerView: View {
     }
     
     public var body: some View {
-        ScrollView {
+        ScrollView(scrollAxis) {
             if container.axis == .vertical {
                 VStack {
                     views
