@@ -11,6 +11,22 @@ import ScreenData
 public struct SDStyleModifier: ViewModifier {
     public var style: SomeStyle
     
+    private var width: CGFloat? {
+        guard let width = style.width else {
+            return nil
+        }
+        
+        return CGFloat(width)
+    }
+    
+    private var height: CGFloat? {
+        guard let height = style.height else {
+            return nil
+        }
+        
+        return CGFloat(height)
+    }
+    
     public func body(content: Content) -> some View {
         if style.isHidden {
             return AnyView(
@@ -21,6 +37,7 @@ public struct SDStyleModifier: ViewModifier {
         } else {
             return AnyView(
                 content
+                    .frame(width: width, height: height, alignment: .center)
                     .padding(CGFloat(style.padding))
                     .background(
                         style.backgroundColor.map {
