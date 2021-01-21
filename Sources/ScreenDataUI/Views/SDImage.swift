@@ -16,10 +16,12 @@ public struct SDImage: View {
     }
     
     public var body: some View {
-        AsyncImage(url: URL(string: image.url)!) {
-            Text("Loading...")
+        SDDestinationLink(provider: SDScreenProvider(), destination: image.destination) {
+            AsyncImage(url: URL(string: image.url)!) {
+                Text("Loading...")
+            }
+            .aspectRatio(contentMode: .fit)
+            .background(with: image.style)
         }
-        .aspectRatio(contentMode: .fit)
-        .background(with: image.style)
     }
 }
