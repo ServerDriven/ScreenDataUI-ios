@@ -33,6 +33,7 @@ public struct SDImage: View {
             AsyncImage(url: URL(string: image.url)!) {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: progressTint))
+                    .padding()
             }
             .aspectRatio(contentMode: .fit)
             .background(with: image.style)
