@@ -18,7 +18,10 @@ public struct SDImage: View {
     public var body: some View {
         SDDestinationLink(provider: SDScreenProvider(), destination: image.destination) {
             AsyncImage(url: URL(string: image.url)!) {
-                Text("Loading...")
+                ProgressView()
+                    .foregroundColor(image.style?.foregroundColor.map {
+                        SDColor(color: $0).body as? Color
+                    } ?? .primary)
             }
             .aspectRatio(contentMode: .fit)
             .background(with: image.style)
