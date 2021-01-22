@@ -3,32 +3,32 @@
 import SwiftUI
 import Combine
 
-struct ImageCacheKey: EnvironmentKey {
-    static let defaultValue: ImageCache = TemporaryImageCache()
+public struct ImageCacheKey: EnvironmentKey {
+    public static let defaultValue: ImageCache = TemporaryImageCache()
 }
 
-extension EnvironmentValues {
+public extension EnvironmentValues {
     var imageCache: ImageCache {
         get { self[ImageCacheKey.self] }
         set { self[ImageCacheKey.self] = newValue }
     }
 }
 
-protocol ImageCache {
+public protocol ImageCache {
     subscript(_ url: URL) -> UIImage? { get set }
 }
 
-struct TemporaryImageCache: ImageCache {
+public struct TemporaryImageCache: ImageCache {
     private let cache = NSCache<NSURL, UIImage>()
     
-    subscript(_ key: URL) -> UIImage? {
+    public subscript(_ key: URL) -> UIImage? {
         get { cache.object(forKey: key as NSURL) }
         set { newValue == nil ? cache.removeObject(forKey: key as NSURL) : cache.setObject(newValue!, forKey: key as NSURL) }
     }
 }
 
-class ImageLoader: ObservableObject {
-    @Published var image: UIImage?
+public class ImageLoader: ObservableObject {
+    @Published public var image: UIImage?
     
     private(set) var isLoading = false
     
@@ -38,7 +38,7 @@ class ImageLoader: ObservableObject {
     
     private static let imageProcessingQueue = DispatchQueue(label: "image-processing")
     
-    init(url: URL, cache: ImageCache? = nil) {
+    public init(url: URL, cache: ImageCache? = nil) {
         self.url = url
         self.cache = cache
     }
@@ -47,9 +47,9 @@ class ImageLoader: ObservableObject {
         cancel()
     }
     
-    func load() {
+    public func load() {
         guard !isLoading else { return }
-
+        
         if let image = cache?[url] {
             self.image = image
             return
@@ -67,7 +67,7 @@ class ImageLoader: ObservableObject {
             .sink { [weak self] in self?.image = $0 }
     }
     
-    func cancel() {
+    public func cancel() {
         cancellable?.cancel()
     }
     
@@ -84,12 +84,12 @@ class ImageLoader: ObservableObject {
     }
 }
 
-struct AsyncImage<Placeholder: View>: View {
+public struct AsyncImage<Placeholder: View>: View {
     @StateObject private var loader: ImageLoader
     private let placeholder: Placeholder
     private let image: (UIImage) -> Image
     
-    init(
+    public init(
         url: URL,
         @ViewBuilder placeholder: () -> Placeholder,
         @ViewBuilder image: @escaping (UIImage) -> Image = Image.init(uiImage:)
@@ -99,7 +99,7 @@ struct AsyncImage<Placeholder: View>: View {
         _loader = StateObject(wrappedValue: ImageLoader(url: url, cache: Environment(\.imageCache).wrappedValue))
     }
     
-    var body: some View {
+    public var body: some View {
         content
             .onAppear(perform: loader.load)
     }
