@@ -24,14 +24,21 @@ public struct SDContainerView: View {
         }
     }
     
-    public var views: some View {
+    private var views: some View {
         ForEach(container.views, id: \.self) { view in
             view.ui
         }
     }
     
-    public var body: some View {
+    private var scrollingView: some View {
         ScrollView(scrollAxis) {
+            content
+        }
+        .background(with: container.style)
+    }
+    
+    private var content: some View {
+        Group {
             if container.axis == .vertical {
                 VStack {
                     views
@@ -42,6 +49,13 @@ public struct SDContainerView: View {
                 }
             }
         }
-        .background(with: container.style)
+    }
+    
+    public var body: some View {
+        if container.isScrollable {
+            scrollingView
+        } else {
+            content.background(with: container.style)
+        }
     }
 }
