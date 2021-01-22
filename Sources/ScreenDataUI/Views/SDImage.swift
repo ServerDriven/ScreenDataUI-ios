@@ -9,6 +9,8 @@ import SwiftUI
 import ScreenData
 
 public struct SDImage: View {
+    public static var defaultForegroundColor: Color?
+    
     public var image: SomeImage
     
     public init(image: SomeImage) {
@@ -21,7 +23,7 @@ public struct SDImage: View {
                 ProgressView()
                     .foregroundColor(image.style?.foregroundColor.map {
                         SDColor(color: $0).body as? Color
-                    } ?? .primary)
+                    } ?? SDImage.defaultForegroundColor ?? .primary)
             }
             .aspectRatio(contentMode: .fit)
             .background(with: image.style)
