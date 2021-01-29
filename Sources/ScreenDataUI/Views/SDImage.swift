@@ -35,7 +35,7 @@ public struct SDImage: View {
                     .progressViewStyle(CircularProgressViewStyle(tint: progressTint))
                     .padding()
             }
-            .aspectRatio(contentMode: .fit)
+            .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
             .background(with: image.style)
         }
     }
