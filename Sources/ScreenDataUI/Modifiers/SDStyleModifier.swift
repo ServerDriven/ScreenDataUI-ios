@@ -37,7 +37,14 @@ public struct SDStyleModifier: ViewModifier {
         } else {
             return AnyView(
                 content
-                    .frame(width: width, height: height, alignment: .center)
+                    .frame(
+                        minWidth: width.map { $0 - 1 } ?? 0,
+                        maxWidth: width ?? .infinity,
+                        minHeight: height.map { $0 - 1 } ?? 0,
+                        maxHeight: width ?? .infinity,
+                        alignment: .center
+                    )
+//                    .frame(width: width, height: height, alignment: .center)
                     .padding(CGFloat(style.padding))
                     .background(
                         style.backgroundColor.map {
