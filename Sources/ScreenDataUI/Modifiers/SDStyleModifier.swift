@@ -37,11 +37,6 @@ public struct SDStyleModifier: ViewModifier {
         } else {
             return AnyView(
                 content
-                    .frame(
-                        width: width,
-                        height: height,
-                        alignment: .center
-                    )
                     .padding(CGFloat(style.padding))
                     .background(
                         style.backgroundColor.map {
@@ -52,6 +47,11 @@ public struct SDStyleModifier: ViewModifier {
                     .foregroundColor(style.foregroundColor.map {
                         SDColor(color: $0).body as? Color
                     } ?? Color.primary)
+                    .frame(
+                        width: width,
+                        height: height,
+                        alignment: .center
+                    )
             )
         }
         
