@@ -42,7 +42,7 @@ public struct SDStyleModifier: ViewModifier {
                             minWidth: 0,
                             maxWidth: width ?? geo.size.width,
                             minHeight: 0,
-                            maxHeight: width ?? geo.size.height,
+                            maxHeight: height ?? geo.size.height,
                             alignment: .center
                         )
     //                    .frame(width: width, height: height, alignment: .center)
