@@ -14,6 +14,23 @@ public struct SDImage: View {
     public var image: SomeImage
     private var progressTint: Color
     
+    private var width: CGFloat? {
+        guard let width = image.style?.width else {
+            return nil
+        }
+        
+        return CGFloat(width)
+    }
+    
+    private var height: CGFloat? {
+        guard let height = image.style?.height else {
+            return nil
+        }
+        
+        return CGFloat(height)
+    }
+    
+    
     public init(image: SomeImage) {
         self.image = image
         
@@ -29,15 +46,18 @@ public struct SDImage: View {
     }
     
     public var body: some View {
-        SDDestinationLink(provider: SDScreenProvider(), destination: image.destination) {
-            AsyncImage(url: URL(string: image.url)!) {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: progressTint))
-                    .padding()
+        GeometryReader { geo in
+            SDDestinationLink(provider: SDScreenProvider(), destination: image.destination) {
+                AsyncImage(url: URL(string: image.url)!) {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: progressTint))
+                        .padding()
+                }
+                .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
+                .background(with: image.style)
+                .frame(width: width ?? geo.size.width, height: height, alignment: .center)
+                .clipped()
             }
-            .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
-            .background(with: image.style)
-            .clipped()
         }
     }
 }

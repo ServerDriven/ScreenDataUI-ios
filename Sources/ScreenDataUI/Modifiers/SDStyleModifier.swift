@@ -36,25 +36,22 @@ public struct SDStyleModifier: ViewModifier {
             )
         } else {
             return AnyView(
-                GeometryReader { geo in
-                    content
-                        .frame(
-                            width: width ?? geo.size.width,
-                            height: height,
-                            alignment: .center
-                        )
-                        .padding(CGFloat(style.padding))
-                        .background(
-                            style.backgroundColor.map {
-                                AnyView(SDColor(color: $0))
-                            } ?? AnyView(Color.clear)
-                        )
-                        .cornerRadius(CGFloat(style.cornerRadius))
-                        .foregroundColor(style.foregroundColor.map {
-                            SDColor(color: $0).body as? Color
-                        } ?? Color.primary)
-                }
-                
+                content
+                    .frame(
+                        width: width,
+                        height: height,
+                        alignment: .center
+                    )
+                    .padding(CGFloat(style.padding))
+                    .background(
+                        style.backgroundColor.map {
+                            AnyView(SDColor(color: $0))
+                        } ?? AnyView(Color.clear)
+                    )
+                    .cornerRadius(CGFloat(style.cornerRadius))
+                    .foregroundColor(style.foregroundColor.map {
+                        SDColor(color: $0).body as? Color
+                    } ?? Color.primary)
             )
         }
         
