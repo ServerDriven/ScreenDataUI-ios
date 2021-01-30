@@ -114,18 +114,18 @@ public struct AsyncImage<Placeholder: View>: View {
     }
     
     private var content: some View {
-        Group {
-            if loader.image != nil {
-                GeometryReader { geo in
+        GeometryReader { geo in
+            Group {
+                if loader.image != nil {
                     image(loader.image!)
                         .resizable()
                         .aspectRatio(contentMode: contentMode)
-                        .frame(width: width ?? geo.size.width, height: height, alignment: .center)
-//                        .clipped()
+                    //                        .clipped()
+                } else {
+                    placeholder
                 }
-            } else {
-                placeholder
             }
+            .frame(width: width ?? geo.size.width, height: height, alignment: .center)
         }
     }
 }
