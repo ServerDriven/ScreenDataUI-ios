@@ -109,6 +109,7 @@ public struct AsyncImage<Placeholder: View>: View {
             if loader.image != nil {
                 image(loader.image!)
                     .resizable()
+                    .clipped()
             } else {
                 placeholder
             }
