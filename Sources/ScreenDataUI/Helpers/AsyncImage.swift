@@ -121,7 +121,7 @@ public struct AsyncImage<Placeholder: View>: View {
                         .resizable()
                         .aspectRatio(contentMode: contentMode)
                         .frame(width: width ?? geo.size.width, height: height, alignment: .center)
-                        .clipped()
+//                        .clipped()
                 }
             } else {
                 placeholder
