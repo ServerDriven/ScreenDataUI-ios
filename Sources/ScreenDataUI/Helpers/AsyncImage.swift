@@ -86,17 +86,17 @@ public class ImageLoader: ObservableObject {
 
 public struct AsyncImage<Placeholder: View>: View {
     @StateObject private var loader: ImageLoader
-    private let placeholder: Placeholder
     private let image: (UIImage) -> Image
     private let width: CGFloat?
     private let height: CGFloat?
+    private let placeholder: Placeholder
     
     public init(
         url: URL,
-        @ViewBuilder placeholder: () -> Placeholder,
         @ViewBuilder image: @escaping (UIImage) -> Image = Image.init(uiImage:),
         width: CGFloat? = nil,
-        height: CGFloat? = nil
+        height: CGFloat? = nil,
+        @ViewBuilder placeholder: () -> Placeholder
     ) {
         self.placeholder = placeholder()
         self.image = image
