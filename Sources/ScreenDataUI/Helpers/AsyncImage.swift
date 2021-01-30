@@ -89,6 +89,7 @@ public struct AsyncImage<Placeholder: View>: View {
     private let image: (UIImage) -> Image
     private let width: CGFloat?
     private let height: CGFloat?
+    private let contentMode: ContentMode
     private let placeholder: Placeholder
     
     public init(
@@ -96,13 +97,15 @@ public struct AsyncImage<Placeholder: View>: View {
         @ViewBuilder image: @escaping (UIImage) -> Image = Image.init(uiImage:),
         width: CGFloat? = nil,
         height: CGFloat? = nil,
+        contentMode: ContentMode = .fit,
         @ViewBuilder placeholder: () -> Placeholder
     ) {
-        self.placeholder = placeholder()
         self.image = image
         self._loader = StateObject(wrappedValue: ImageLoader(url: url, cache: Environment(\.imageCache).wrappedValue))
         self.width = width
         self.height = height
+        self.contentMode = contentMode
+        self.placeholder = placeholder()
     }
     
     public var body: some View {
@@ -116,6 +119,7 @@ public struct AsyncImage<Placeholder: View>: View {
                 GeometryReader { geo in
                     image(loader.image!)
                         .resizable()
+                        .aspectRatio(contentMode: contentMode)
                         .frame(width: width ?? geo.size.width, height: height, alignment: .center)
                         .clipped()
                 }

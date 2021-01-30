@@ -48,13 +48,17 @@ public struct SDImage: View {
     public var body: some View {
         GeometryReader { geo in
             SDDestinationLink(provider: SDScreenProvider(), destination: image.destination) {
-                AsyncImage(url: URL(string: image.url)!, width: width, height: height) {
+                AsyncImage(
+                    url: URL(string: image.url)!,
+                    width: width,
+                    height: height,
+                    contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill
+                ) {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: progressTint))
                         .padding()
                 }
-                .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
-                .background(with: image.style)
+//                .background(with: image.style)
             }
         }
     }
