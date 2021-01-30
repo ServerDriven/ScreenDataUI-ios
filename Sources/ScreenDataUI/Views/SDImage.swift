@@ -36,8 +36,8 @@ public struct SDImage: View {
                     .padding()
             }
             .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
-            .background(with: image.style)
             .clipped()
+            .background(with: image.style)
         }
     }
 }
