@@ -39,9 +39,9 @@ public struct SDStyleModifier: ViewModifier {
                 GeometryReader { geo in
                     content
                         .frame(
-                            minWidth: 0,
+                            minWidth: width.map { $0 - 1 } ?? 0,
                             maxWidth: width ?? geo.size.width,
-                            minHeight: 0,
+                            minHeight: height.map { $0 - 1 } ?? 0,
                             maxHeight: height ?? geo.size.height,
                             alignment: .center
                         )
