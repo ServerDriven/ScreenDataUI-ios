@@ -40,7 +40,7 @@ public struct SDStyleModifier: ViewModifier {
                     content
                         .frame(
                             width: width ?? geo.size.width,
-                            height: height ?? geo.size.height,
+                            height: height,
                             alignment: .center
                         )
                         .padding(CGFloat(style.padding))
