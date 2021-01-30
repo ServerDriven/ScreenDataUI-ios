@@ -88,15 +88,21 @@ public struct AsyncImage<Placeholder: View>: View {
     @StateObject private var loader: ImageLoader
     private let placeholder: Placeholder
     private let image: (UIImage) -> Image
+    private let width: CGFloat?
+    private let height: CGFloat?
     
     public init(
         url: URL,
         @ViewBuilder placeholder: () -> Placeholder,
-        @ViewBuilder image: @escaping (UIImage) -> Image = Image.init(uiImage:)
+        @ViewBuilder image: @escaping (UIImage) -> Image = Image.init(uiImage:),
+        width: CGFloat? = nil,
+        height: CGFloat? = nil
     ) {
         self.placeholder = placeholder()
         self.image = image
-        _loader = StateObject(wrappedValue: ImageLoader(url: url, cache: Environment(\.imageCache).wrappedValue))
+        self._loader = StateObject(wrappedValue: ImageLoader(url: url, cache: Environment(\.imageCache).wrappedValue))
+        self.width = width
+        self.height = height
     }
     
     public var body: some View {
@@ -107,8 +113,12 @@ public struct AsyncImage<Placeholder: View>: View {
     private var content: some View {
         Group {
             if loader.image != nil {
-                image(loader.image!)
-                    .resizable()
+                GeometryReader { geo in
+                    image(loader.image!)
+                        .resizable()
+                        .frame(width: width ?? geo.size.width, height: height, alignment: .center)
+                        .clipped()
+                }
             } else {
                 placeholder
             }
