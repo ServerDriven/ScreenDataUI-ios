@@ -119,7 +119,6 @@ public struct AsyncImage<Placeholder: View>: View {
                 image(loader.image!)
                     .resizable()
                     .aspectRatio(contentMode: contentMode)
-                //                        .clipped()
             } else {
                 placeholder
             }

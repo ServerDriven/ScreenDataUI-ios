@@ -57,7 +57,6 @@ public struct SDImage: View {
                     .progressViewStyle(CircularProgressViewStyle(tint: progressTint))
                     .padding()
             }
-            //                .background(with: image.style)
         }
     }
 }
