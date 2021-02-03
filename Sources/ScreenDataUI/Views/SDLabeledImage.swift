@@ -19,7 +19,7 @@ public struct SDLabeledImage: View {
         SDDestinationLink(provider: SDScreenProvider(), destination: labeledImage.destination) {
             VStack {
                 SDImage(image: labeledImage.someImage)
-                SDLabel(label: SomeLabel(title: labeledImage.title, style: labeledImage.style))
+                SDLabel(label: SomeLabel(title: labeledImage.title, font: labeledImage.font, style: labeledImage.style))
                 if let subtitle = labeledImage.subtitle {
                     SDText(text: SomeText(title: subtitle, style: labeledImage.style))
                 }
