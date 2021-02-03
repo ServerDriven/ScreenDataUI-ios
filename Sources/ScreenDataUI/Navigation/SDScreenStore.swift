@@ -1,0 +1,24 @@
+//
+//  SDScreenStore.swift
+//  
+//
+//  Created by Zach Eriksen on 1/12/21.
+//
+
+import Foundation
+import ScreenData
+import ScreenDataNavigation
+import Combine
+
+public struct SDScreenStore: ScreenStoring {
+    public static var `default`: ScreenStoring?
+    
+    public func store(screens: [SomeScreen]) -> AnyPublisher<Void, Error> {
+        guard let store = SDScreenStore.default else {
+            return ScreenDataNavigation.UserDefaultScreenStorer(baseKey: "SDScreenStore")
+                .store(screens: screens)
+        }
+        
+        return store.store(screens: screens)
+    }
+}
