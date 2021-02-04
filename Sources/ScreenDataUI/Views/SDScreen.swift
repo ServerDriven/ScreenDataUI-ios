@@ -19,14 +19,14 @@ public struct SDScreen: View {
         DispatchQueue.global().async {
             let sema = DispatchSemaphore(value: 0)
             
-            let task = SDScreenStore.default?.store(screens: [screen]).sink(receiveCompletion: { _ in }, receiveValue: { _ in
-                print("SAVED Screen")
+            let task = SDScreenStore().store(screens: [screen]).sink(receiveCompletion: { _ in }, receiveValue: { _ in
+                print("SAVED Screen: \(screen.id)")
                 sema.signal()
             })
             
             sema.wait()
             
-            task?.cancel()
+            task.cancel()
         }
     }
     
