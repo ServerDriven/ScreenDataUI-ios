@@ -13,6 +13,8 @@ import Combine
 public struct SDScreenStore: ScreenStoring {
     public static var `default`: ScreenStoring?
     
+    public init() { }
+    
     public func store(screens: [SomeScreen]) -> AnyPublisher<Void, Error> {
         guard let store = SDScreenStore.default else {
             return ScreenDataNavigation.UserDefaultScreenStorer(baseKey: "SDScreenStore")

@@ -13,6 +13,8 @@ import Combine
 public struct SDScreenProvider: ScreenProviding {
     public static var `default`: ScreenProviding?
     
+    public init() { }
+    
     public func screen(forID id: String) -> AnyPublisher<SomeScreen, Error> {
         guard let provider = SDScreenProvider.default else {
             return ScreenDataNavigation.MockScreenProvider(mockScreen:
