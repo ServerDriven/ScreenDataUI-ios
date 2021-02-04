@@ -24,10 +24,13 @@ public struct SDScreenProvider: ScreenProviding {
             .eraseToAnyPublisher()
         }
         
+        guard SDScreenStore.default != nil else {
+            return ScreenDataNavigation.UserDefaultScreenProvider(baseKey: "SDScreenStore")
+                .screen(forID: id)
+                .catch { _ in provider.screen(forID: id) }
+                .eraseToAnyPublisher()
+        }
         
-        return ScreenDataNavigation.UserDefaultScreenProvider(baseKey: "SDScreenStore")
-            .screen(forID: id)
-            .catch { _ in provider.screen(forID: id) }
-            .eraseToAnyPublisher()
+        return provider.screen(forID: id)
     }
 }
