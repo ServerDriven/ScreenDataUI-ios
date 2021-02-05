@@ -22,15 +22,9 @@ public struct SDScreenProvider: ScreenProviding {
                                                                        subtitle: "ScreenData",
                                                                        backgroundColor: SomeColor(red: 1, green: 1, blue: 1),
                                                                        someView: SomeText(title: "Set SDScreenProvider.default").someView)
-            ).screen(forID: id)
+            )
+            .screen(forID: id)
             .eraseToAnyPublisher()
-        }
-        
-        guard SDScreenStore.default != nil else {
-            return ScreenDataNavigation.UserDefaultScreenProvider(baseKey: "SDScreenStore")
-                .screen(forID: id)
-                .catch { _ in provider.screen(forID: id) }
-                .eraseToAnyPublisher()
         }
         
         return provider.screen(forID: id)
