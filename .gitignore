@@ -2,3 +2,4 @@
 *.
 /ScreenDataUI.xcodeproj/
 /Package.resolved
+/.swiftpm/
