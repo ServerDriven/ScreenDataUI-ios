@@ -17,8 +17,6 @@ public extension SomeView {
             return AnyView(SDLabel(label: someLabel!))
         case .text:
             return AnyView(SDText(text: someText!))
-        case .labeledImage:
-            return AnyView(SDLabeledImage(labeledImage: someLabeledImage!))
         case .container:
             return AnyView(SDContainerView(container: someContainer!))
         case .image:

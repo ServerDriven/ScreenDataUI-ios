@@ -19,10 +19,15 @@ public struct SDScreen: View {
         DispatchQueue.global().async {
             let sema = DispatchSemaphore(value: 0)
             
-            let task = SDScreenStore().store(screens: [screen]).sink(receiveCompletion: { _ in }, receiveValue: { _ in
-                print("SAVED Screen: \(screen.id)")
-                sema.signal()
-            })
+            let task = SDScreenStore()
+                .store(screens: [screen])
+                .sink(
+                    receiveCompletion: { _ in },
+                    receiveValue: { _ in
+                        print("[\(Data())] \(#function) SAVED Screen: \(screen.id)")
+                        sema.signal()
+                    }
+                )
             
             sema.wait()
             
@@ -43,9 +48,9 @@ public struct SDScreen: View {
             }
         }
         .background(Color(red: Double(screen.backgroundColor.red),
-                           green: Double(screen.backgroundColor.green),
-                           blue: Double(screen.backgroundColor.blue),
-                           opacity: Double(screen.backgroundColor.alpha)))
+                          green: Double(screen.backgroundColor.green),
+                          blue: Double(screen.backgroundColor.blue),
+                          opacity: Double(screen.backgroundColor.alpha)))
         .navigationBarTitle(screen.title)
     }
 }
