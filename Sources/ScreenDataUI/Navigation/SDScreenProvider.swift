@@ -19,7 +19,6 @@ public struct SDScreenProvider: ScreenProviding {
         guard let provider = SDScreenProvider.default else {
             return ScreenDataNavigation.MockScreenProvider(mockScreen:
                                                             SomeScreen(title: "Mock Screen",
-                                                                       subtitle: "ScreenData",
                                                                        backgroundColor: SomeColor(red: 1, green: 1, blue: 1),
                                                                        someView: SomeText(title: "Set SDScreenProvider.default").someView)
             )
