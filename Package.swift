@@ -17,8 +17,8 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(name: "ScreenData", url: "https://github.com/ServerDriven/ScreenData-swift", from: "0.3.0"),
-        .package(name: "ScreenDataNavigation", url: "https://github.com/ServerDriven/ScreenDataNavigation-swift", from: "0.3.1")
+        .package(name: "ScreenData", url: "https://github.com/ServerDriven/ScreenData-swift", .branch("ScreenDataUpdates")),
+        .package(name: "ScreenDataNavigation", url: "https://github.com/ServerDriven/ScreenDataNavigation-swift", .branch("ScreenDataUpdates"))
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
