@@ -12,23 +12,6 @@ import ScreenDataNavigation
 public struct SDLabel: View {
     public var label: SomeLabel
     
-    private var font: Font {
-        switch label.font {
-        case .largeTitle:
-            return .largeTitle
-        case .title:
-            return .title
-        case .headline:
-            return .headline
-        case .body:
-            return .body
-        case .footnote:
-            return .footnote
-        case .caption:
-            return .caption
-        }
-    }
-    
     public init(
         label: SomeLabel
     ) {
@@ -40,13 +23,13 @@ public struct SDLabel: View {
             VStack {
                 // Title
                 Text(label.title)
-                    .font(font)
+                    .font(SDFont.font(for: label.font))
                     .multilineTextAlignment(label.destination.map { _ in .center } ?? .leading)
                 
                 // Subtitle
                 label.subtitle.map {
                     Text($0)
-                        .font(.headline)
+                        .font(SDFont.font(for: .headline))
                         .multilineTextAlignment(.leading)
                 }
             }
