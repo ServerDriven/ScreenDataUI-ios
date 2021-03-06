@@ -29,7 +29,7 @@ public class SDDestinationStore: ObservableObject {
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { [weak self] (screen) in
-                    guard SDScreen(screen: screen) != self?.destinationView else {
+                    guard screen != self?.destinationView?.screen else {
                         return
                     }
                     self?.destinationView = SDScreen(screen: screen)
