@@ -9,7 +9,7 @@ import SwiftUI
 import ScreenData
 import Combine
 
-public struct SDScreen: View {
+public struct SDScreen: View, Equatable {
     public let id = UUID()
     public var screen: SomeScreen
     
