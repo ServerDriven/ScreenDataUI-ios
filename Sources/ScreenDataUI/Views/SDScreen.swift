@@ -24,7 +24,6 @@ public struct SDScreen: View {
                 .sink(
                     receiveCompletion: { _ in },
                     receiveValue: { _ in
-                        print("[\(Data())] \(#function) SAVED Screen: \(screen.id)")
                         sema.signal()
                     }
                 )
