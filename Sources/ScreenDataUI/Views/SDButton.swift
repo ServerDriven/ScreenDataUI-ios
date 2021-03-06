@@ -43,6 +43,7 @@ public struct SDButton: View {
             }
         }) {
             Text(button.title)
+                .font(SDFont.font(for: .body))
                 .background(with: button.style)
         }
         .sheet(item: $modalScreen) { (destination) in

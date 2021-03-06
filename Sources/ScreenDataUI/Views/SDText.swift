@@ -17,6 +17,7 @@ public struct SDText: View {
     
     public var body: some View {
         Text(text.title)
+            .font(SDFont.font(for: .body))
             .background(with: text.style)
             .multilineTextAlignment(.leading)
     }
