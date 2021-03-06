@@ -40,6 +40,7 @@ public class SDDestinationStore: ObservableObject {
 
 public struct SDDestinationLink<Content>: View where Content: View {
     @StateObject private var store: SDDestinationStore = SDDestinationStore()
+    @State private var isPresentingDestination = false
     
     public var provider: ScreenProviding
     
@@ -54,7 +55,6 @@ public struct SDDestinationLink<Content>: View where Content: View {
         self.provider = provider
         self.destination = destination
         self.content = content
-        store.load(destination: destination, provider: provider)
     }
     
     public var body: some View {
@@ -66,15 +66,24 @@ public struct SDDestinationLink<Content>: View where Content: View {
             return AnyView(loadingView)
         }
         
+        isPresentingDestination = false
+        
         return AnyView(
             NavigationLink(
-                        destination: destinationView,
-                        label: {
-                            content()
-                        }
+                destination: destinationView,
+                isActive: $isPresentingDestination,
+                label: {
+                    Button(action: {
+                        isPresentingDestination = true
+                    }, label: {
+                        content()
+                    })
+                }
             )
+            .onAppear {
+                store.load(destination: destination, provider: provider)
+            }
         )
-        
     }
     
     public var loadingView: some View {
@@ -82,6 +91,10 @@ public struct SDDestinationLink<Content>: View where Content: View {
             return AnyView(content())
         }
         
-        return AnyView(ProgressView())
+        return AnyView(ProgressView()
+                        .onAppear {
+                            store.load(destination: destination,
+                                       provider: provider)
+                        })
     }
 }
