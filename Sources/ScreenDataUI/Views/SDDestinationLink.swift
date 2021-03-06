@@ -20,20 +20,18 @@ public class SDDestinationStore: ObservableObject {
     }
     
     public func load(destination: Destination?, provider: ScreenProviding) {
-        guard destinationView == nil else {
-            return
-        }
-        
         guard let destination = destination else {
             return
         }
         
         task = provider.screen(forID: destination.toID)
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { _ in },
-                  receiveValue: { [weak self] (screen) in
+            .sink(
+                receiveCompletion: { _ in },
+                receiveValue: { [weak self] (screen) in
                     self?.destinationView = SDScreen(screen: screen)
-                  })
+                }
+            )
     }
 }
 
@@ -64,11 +62,17 @@ public struct SDDestinationLink<Content>: View where Content: View {
             return AnyView(loadingView)
         }
         
-        return AnyView(NavigationLink(
+        return AnyView(
+            NavigationLink(
                         destination: destinationView,
                         label: {
                             content()
-                        }))
+                        }
+            )
+            .onAppear {
+                store.load(destination: destination, provider: provider)
+            }
+        )
         
     }
     
