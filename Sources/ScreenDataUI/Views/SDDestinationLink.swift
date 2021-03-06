@@ -54,6 +54,7 @@ public struct SDDestinationLink<Content>: View where Content: View {
         self.provider = provider
         self.destination = destination
         self.content = content
+        store.load(destination: destination, provider: provider)
     }
     
     public var body: some View {
@@ -72,9 +73,6 @@ public struct SDDestinationLink<Content>: View where Content: View {
                             content()
                         }
             )
-            .onAppear {
-                store.load(destination: destination, provider: provider)
-            }
         )
         
     }
@@ -84,10 +82,6 @@ public struct SDDestinationLink<Content>: View where Content: View {
             return AnyView(content())
         }
         
-        return AnyView(ProgressView()
-                        .onAppear {
-                            store.load(destination: destination,
-                                       provider: provider)
-                        })
+        return AnyView(ProgressView())
     }
 }
