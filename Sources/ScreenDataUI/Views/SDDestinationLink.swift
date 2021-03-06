@@ -66,8 +66,6 @@ public struct SDDestinationLink<Content>: View where Content: View {
             return AnyView(loadingView)
         }
         
-        isPresentingDestination = false
-        
         return AnyView(
             NavigationLink(
                 destination: destinationView,
