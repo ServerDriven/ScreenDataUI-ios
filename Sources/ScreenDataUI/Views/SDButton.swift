@@ -30,27 +30,44 @@ public struct SDButton: View {
     }
     
     public var body: some View {
-        Button(action: {
-            print("[SDButton] ActionID: \(String(describing: button.actionID)) & Destination: \(String(describing: button.destination))")
-            if let actionID = button.actionID,
-               let action = SDButton.actions[actionID] {
-                action()
-            }
-            
-            if let destination = button.destination {
-                print("Navigate to destination: (\(destination))")
-                modalScreen = store.destinationView
-            }
-        }) {
-            Text(button.title)
-                .font(SDFont.font(for: .body))
-                .background(with: button.style)
+        guard button.destination != nil else {
+            return AnyView(
+                Button(
+                    action: buttonAction,
+                    label: {
+                        Text(button.title)
+                            .font(SDFont.font(for: .body))
+                            .background(with: button.style)
+                    }
+                )
+            )
         }
-        .sheet(item: $modalScreen) { (destination) in
-            destination
+        
+        return AnyView(
+            SDDestinationLink(
+                provider: SDScreenProvider(),
+                destination: button.destination,
+                action: buttonAction,
+                content: {
+                    Text(button.title)
+                        .font(SDFont.font(for: .body))
+                        .background(with: button.style)
+                }
+            )
+        )
+    }
+    
+    private func buttonAction() {
+        print("[SDButton] ActionID: \(String(describing: button.actionID)) & Destination: \(String(describing: button.destination))")
+        if let actionID = button.actionID,
+           let action = SDButton.actions[actionID] {
+            action()
         }
-        .onAppear {
-            store.load(destination: button.destination, provider: SDScreenProvider())
+        
+        if let destination = button.destination {
+            print("Navigate to destination: (\(destination))")
+            modalScreen = store.destinationView
         }
+        
     }
 }
