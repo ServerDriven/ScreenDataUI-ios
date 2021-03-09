@@ -39,27 +39,46 @@ public class SDDestinationStore: ObservableObject {
 }
 
 public struct SDDestinationLink<Content>: View where Content: View {
+    @Environment(\.openURL) private var openURL
+    
     @StateObject private var store: SDDestinationStore = SDDestinationStore()
     @State private var isPresentingDestination = false
     
     public var provider: ScreenProviding
     
     public var destination: Destination?
+    public var action: (() -> Void)?
     public var content: () -> Content
     
     public init(
         provider: ScreenProviding,
         destination: Destination?,
+        action: (() -> Void)? = nil,
         content: @escaping () -> Content
     ) {
         self.provider = provider
         self.destination = destination
+        self.action = action
         self.content = content
     }
     
     public var body: some View {
         if destination == nil {
             return AnyView(content())
+        }
+        
+        guard destination?.type != .url else {
+            return AnyView(
+                Button(action: {
+                    action?()
+                    if let destinationURL = destination?.toID,
+                       let url = URL(string: destinationURL) {
+                        openURL(url)
+                    }
+                }, label: {
+                    content()
+                })
+            )
         }
         
         guard let destinationView = store.destinationView else {
@@ -72,6 +91,7 @@ public struct SDDestinationLink<Content>: View where Content: View {
                 isActive: $isPresentingDestination,
                 label: {
                     Button(action: {
+                        action?()
                         isPresentingDestination = true
                     }, label: {
                         content()
@@ -89,10 +109,12 @@ public struct SDDestinationLink<Content>: View where Content: View {
             return AnyView(content())
         }
         
-        return AnyView(ProgressView()
-                        .onAppear {
-                            store.load(destination: destination,
-                                       provider: provider)
-                        })
+        return AnyView(
+            ProgressView()
+                .onAppear {
+                    store.load(destination: destination,
+                               provider: provider)
+                }
+        )
     }
 }
