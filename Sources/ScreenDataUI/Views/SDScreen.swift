@@ -10,7 +10,6 @@ import ScreenData
 import Combine
 
 public struct SDScreen: View, Equatable {
-    public let id = UUID()
     public var screen: SomeScreen
     
     public init(screen: SomeScreen) {
@@ -22,9 +21,11 @@ public struct SDScreen: View, Equatable {
             let task = SDScreenStore()
                 .store(screens: [screen])
                 .sink(
-                    receiveCompletion: { _ in },
-                    receiveValue: { _ in
+                    receiveCompletion: { _ in
                         sema.signal()
+                    },
+                    receiveValue: { _ in
+                        
                     }
                 )
             
@@ -53,5 +54,3 @@ public struct SDScreen: View, Equatable {
         .navigationBarTitle(screen.title)
     }
 }
-
-extension SDScreen: Identifiable { }
