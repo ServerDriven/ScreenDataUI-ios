@@ -30,6 +30,24 @@ public struct SDImage: View {
         return CGFloat(height)
     }
     
+    private var imageView: some View {
+        if let assetName = image.assetName,
+           let image = UIImage(named: assetName) {
+            return AnyView(Image(uiImage: image))
+        } else {
+            return AnyView(AsyncImage(
+                url: URL(string: image.url)!,
+                width: width,
+                height: height,
+                contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill
+            ) {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: progressTint))
+                    .padding()
+            })
+        }
+    }
+    
     
     public init(image: SomeImage) {
         self.image = image
@@ -47,16 +65,7 @@ public struct SDImage: View {
     
     public var body: some View {
         SDDestinationLink(provider: SDScreenProvider(), destination: image.destination) {
-            AsyncImage(
-                url: URL(string: image.url)!,
-                width: width,
-                height: height,
-                contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill
-            ) {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: progressTint))
-                    .padding()
-            }
+            imageView
         }
     }
 }
