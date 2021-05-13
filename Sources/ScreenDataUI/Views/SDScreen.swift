@@ -27,10 +27,9 @@ public struct SDScreen: View, Equatable {
                         .mapError(absurd)
                         .eraseToAnyPublisher()
                 )
-                .collect(10)
-                .flatMany { screens in
+                .flatMany { screen in
                     SDScreenStore()
-                        .store(screens: screens)
+                        .store(screens: [screen])
                 }
                 .sink(
                     receiveCompletion: { _ in
