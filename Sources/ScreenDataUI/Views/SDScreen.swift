@@ -8,6 +8,7 @@
 import SwiftUI
 import ScreenData
 import Combine
+import FlatMany
 
 public struct SDScreen: View, Equatable {
     public var screen: SomeScreen
@@ -18,8 +19,11 @@ public struct SDScreen: View, Equatable {
         DispatchQueue.global().async {
             let sema = DispatchSemaphore(value: 0)
             
-            let task = SDScreenStore()
-                .store(screens: [screen])
+            let task = screen.load(withProvider: SDScreenProvider())
+                .flatMany { someScreen in
+                    SDScreenStore()
+                        .store(screens: [someScreen])
+                }
                 .sink(
                     receiveCompletion: { _ in
                         sema.signal()
