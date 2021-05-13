@@ -22,14 +22,10 @@ public struct SDScreen: View, Equatable {
             let sema = DispatchSemaphore(value: 0)
             
             let task = screen.load(withProvider: SDScreenProvider())
-                .merge(
-                    with: Just([screen])
-                        .mapError(absurd)
-                        .eraseToAnyPublisher()
-                )
-                .flatMany { screen in
+                .collect()
+                .flatMany { screens in
                     SDScreenStore()
-                        .store(screens: [screen])
+                        .store(screens: screens + [screen])
                 }
                 .sink(
                     receiveCompletion: { _ in
