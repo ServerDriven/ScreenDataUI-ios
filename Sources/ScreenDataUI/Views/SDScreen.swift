@@ -20,9 +20,10 @@ public struct SDScreen: View, Equatable {
             let sema = DispatchSemaphore(value: 0)
             
             let task = screen.load(withProvider: SDScreenProvider())
-                .flatMany { someScreen in
+                .collect()
+                .flatMany { screens in
                     SDScreenStore()
-                        .store(screens: [someScreen])
+                        .store(screens: screens)
                 }
                 .sink(
                     receiveCompletion: { _ in
