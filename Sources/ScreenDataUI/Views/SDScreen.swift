@@ -27,7 +27,7 @@ public struct SDScreen: View, Equatable {
                         .mapError(absurd)
                         .eraseToAnyPublisher()
                 )
-                .collect()
+                .collect(10)
                 .flatMany { screens in
                     SDScreenStore()
                         .store(screens: screens)
