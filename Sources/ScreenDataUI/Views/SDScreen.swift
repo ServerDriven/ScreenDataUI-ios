@@ -10,8 +10,6 @@ import ScreenData
 import Combine
 import FlatMany
 
-private func absurd<A>(_ never: Never) -> A { }
-
 public struct SDScreen: View, Equatable {
     public var screen: SomeScreen
     
