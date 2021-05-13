@@ -10,6 +10,8 @@ import ScreenData
 import Combine
 import FlatMany
 
+private func absurd<A>(_ never: Never) -> A { }
+
 public struct SDScreen: View, Equatable {
     public var screen: SomeScreen
     
@@ -20,6 +22,11 @@ public struct SDScreen: View, Equatable {
             let sema = DispatchSemaphore(value: 0)
             
             let task = screen.load(withProvider: SDScreenProvider())
+                .merge(
+                    with: Just([screen])
+                        .mapError(absurd)
+                        .eraseToAnyPublisher()
+                )
                 .collect()
                 .flatMany { screens in
                     SDScreenStore()
