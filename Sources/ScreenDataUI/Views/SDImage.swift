@@ -122,13 +122,13 @@ public class SDImageStore: ObservableObject {
         }
         
         task = provider.image(forURL: url)
-            .receive(on: DispatchQueue.main)
             .flatMap { image in
                 storer.store(image: image, forURL: url)
                     .map {
                         image
                     }
             }
+            .receive(on: DispatchQueue.main)
             .sink(
                 .success { [weak self] image in
                     self?.image = image
