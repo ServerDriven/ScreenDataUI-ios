@@ -15,7 +15,9 @@ public protocol SDImageProviding {
     func image(forURL url: URL) -> AnyPublisher<UIImage?, Error>
 }
 
-public class SDImageURLProvider: SDImageProviding {
+public struct SDImageURLProvider: SDImageProviding {
+    public init() { }
+    
     public func image(forURL url: URL) -> AnyPublisher<UIImage?, Error> {
         Task.fetch(url: url)
             .flatMap { (data, response) in
@@ -32,7 +34,9 @@ public class SDImageURLProvider: SDImageProviding {
     }
 }
 
-public class SDImageUserDefaultsProvider: SDImageProviding {
+public struct SDImageUserDefaultsProvider: SDImageProviding {
+    public init() { }
+    
     public func image(forURL url: URL) -> AnyPublisher<UIImage?, Error> {
         Task.do {
             let imageData: Data? = UserDefaults.standard.data(forKey: url.absoluteString)
@@ -49,7 +53,9 @@ public class SDImageUserDefaultsProvider: SDImageProviding {
     }
 }
 
-public class SDImageURLUserDefaultsProvider: SDImageProviding {
+public struct SDImageURLUserDefaultsProvider: SDImageProviding {
+    public init() { }
+    
     public func image(forURL url: URL) -> AnyPublisher<UIImage?, Error> {
         SDImageUserDefaultsProvider()
             .image(forURL: url)
@@ -82,7 +88,9 @@ public protocol SDImageStoring {
     func store(image: UIImage?, forURL url: URL) -> AnyPublisher<Void, Error>
 }
 
-public class SDImageUserDefaultsStorer: SDImageStoring {
+public struct SDImageUserDefaultsStorer: SDImageStoring {
+    public init() { }
+    
     public func store(image: UIImage?, forURL url: URL) -> AnyPublisher<Void, Error> {
         Task.do {
             if let imageData = image?.pngData() {
