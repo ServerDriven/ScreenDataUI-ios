@@ -49,15 +49,46 @@ public class SDImageUserDefaultsProvider: SDImageProviding {
     }
 }
 
+public class SDImageURLUserDefaultsProvider: SDImageProviding {
+    public func image(forURL url: URL) -> AnyPublisher<UIImage?, Error> {
+        SDImageUserDefaultsProvider()
+            .image(forURL: url)
+            .flatMap { image -> AnyPublisher<UIImage?, Error> in
+                guard let image = image else {
+                    return Task.fetch(url: url)
+                        .flatMap { (data, response) in
+                            Task.do {
+                                guard let data = data else {
+                                    return nil
+                                }
+                                let image = UIImage(data: data)
+                                
+                                return image
+                            }
+                        }
+                        .eraseToAnyPublisher()
+                }
+                
+                return Just(image)
+                    .mapError { (Never) -> Error in }
+                    .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+        
+    }
+}
+
 public protocol SDImageStoring {
-    func store(image: UIImage, forURL url: URL) -> AnyPublisher<Void, Error>
+    func store(image: UIImage?, forURL url: URL) -> AnyPublisher<Void, Error>
 }
 
 public class SDImageUserDefaultsStorer: SDImageStoring {
-    public func store(image: UIImage, forURL url: URL) -> AnyPublisher<Void, Error> {
+    public func store(image: UIImage?, forURL url: URL) -> AnyPublisher<Void, Error> {
         Task.do {
-            if let imageData = image.pngData() {
+            if let imageData = image?.pngData() {
                 UserDefaults.standard.set(imageData, forKey: url.absoluteString)
+            } else {
+                UserDefaults.standard.set(nil, forKey: url.absoluteString)
             }
         }
         .eraseToAnyPublisher()
@@ -74,16 +105,22 @@ public class SDImageStore: ObservableObject {
     }
     
     public func load(
-        imageWithURL url: String?,
-        provider: SDImageProviding
+        imageWithURL urlString: String,
+        provider: SDImageProviding,
+        storer: SDImageStoring
     ) {
-        guard let urlString = url,
-              let url = URL(string: urlString) else {
+        guard let url = URL(string: urlString) else {
             return
         }
         
         task = provider.image(forURL: url)
             .receive(on: DispatchQueue.main)
+            .flatMap { image in
+                storer.store(image: image, forURL: url)
+                    .map {
+                        image
+                    }
+            }
             .sink(
                 .success { [weak self] image in
                     self?.image = image
@@ -134,7 +171,7 @@ public struct SDImage: View {
                     .padding()
                     .onAppear {
                         if store.image == nil {
-                            store.load(imageWithURL: image.url, provider: SDImage.defaultImageProvider)
+                            store.load(imageWithURL: image.url, provider: SDImage.defaultImageProvider, storer: SDImageUserDefaultsStorer())
                         }
                     }
             }
