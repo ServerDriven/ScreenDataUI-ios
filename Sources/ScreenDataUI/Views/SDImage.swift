@@ -92,23 +92,23 @@ public struct SDImage: View {
     
     private var imageView: some View {
         Group {
-            if let loadedImage = store.image {
+            if let placeholderAssetName = image.assetName,
+                      let placeholder = UIImage(named: placeholderAssetName) {
+                Image(uiImage: placeholder)
+            } else if let loadedImage = store.image {
                 Image(uiImage: loadedImage)
                     .resizable()
                     .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
                     .frame(width: width ?? UIScreen.main.bounds.width, height: height, alignment: .center)
-            } else if let placeholderAssetName = image.assetName,
-                      let placeholder = UIImage(named: placeholderAssetName) {
-                Image(uiImage: placeholder)
             } else {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: progressTint))
                     .padding()
-            }
-        }
-        .onAppear {
-            if store.image == nil {
-                store.load(imageWithURL: image.url, provider: SDImage.defaultImageProvider)
+                    .onAppear {
+                        if store.image == nil {
+                            store.load(imageWithURL: image.url, provider: SDImage.defaultImageProvider)
+                        }
+                    }
             }
         }
     }
