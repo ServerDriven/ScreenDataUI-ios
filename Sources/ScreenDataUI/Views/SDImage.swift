@@ -32,8 +32,36 @@ public class SDImageURLProvider: SDImageProviding {
     }
 }
 
+public class SDImageUserDefaultsProvider: SDImageProviding {
+    public func image(forURL url: URL) -> AnyPublisher<UIImage?, Error> {
+        Task.do {
+            let imageData: Data? = UserDefaults.standard.data(forKey: url.absoluteString)
+            
+            guard let data = imageData else {
+                return nil
+            }
+            let image = UIImage(data: data)
+            
+            return image
+            
+        }
+        .eraseToAnyPublisher()
+    }
+}
+
 public protocol SDImageStoring {
-    func store(image: UIImage) -> AnyPublisher<Void, Error>
+    func store(image: UIImage, forURL url: URL) -> AnyPublisher<Void, Error>
+}
+
+public class SDImageUserDefaultsStorer: SDImageStoring {
+    public func store(image: UIImage, forURL url: URL) -> AnyPublisher<Void, Error> {
+        Task.do {
+            if let imageData = image.pngData() {
+                UserDefaults.standard.set(imageData, forKey: url.absoluteString)
+            }
+        }
+        .eraseToAnyPublisher()
+    }
 }
 
 public class SDImageStore: ObservableObject {
@@ -67,7 +95,7 @@ public class SDImageStore: ObservableObject {
 public struct SDImage: View {
     public static var defaultForegroundColor: Color?
     public static var defaultImageProvider: SDImageProviding = SDImageURLProvider()
-    public static var defaultImageStorer: SDImageStoring!
+    public static var defaultImageStorer: SDImageStoring = SDImageUserDefaultsStorer()
     
     @StateObject private var store = SDImageStore()
     
@@ -93,7 +121,7 @@ public struct SDImage: View {
     private var imageView: some View {
         Group {
             if let placeholderAssetName = image.assetName,
-                      let placeholder = UIImage(named: placeholderAssetName) {
+               let placeholder = UIImage(named: placeholderAssetName) {
                 Image(uiImage: placeholder)
             } else if let loadedImage = store.image {
                 Image(uiImage: loadedImage)
