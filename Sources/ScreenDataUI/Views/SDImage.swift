@@ -12,18 +12,20 @@ import Combine
 import Task
 
 public protocol SDImageProviding {
-    func image(forURL url: String) -> AnyPublisher<UIImage?, Error>
+    func image(forURL url: URL) -> AnyPublisher<UIImage?, Error>
 }
 
-public struct SDImageURLProvider: SDImageProviding {
-    public func image(forURL url: String) -> AnyPublisher<UIImage?, Error> {
-        Task.fetch(url: URL(string: url)!)
+public class SDImageURLProvider: SDImageProviding {
+    public func image(forURL url: URL) -> AnyPublisher<UIImage?, Error> {
+        Task.fetch(url: url)
             .flatMap { (data, response) in
                 Task.do {
                     guard let data = data else {
                         return nil
                     }
-                    return UIImage(data: data)
+                    let image = UIImage(data: data)
+                    
+                    return image
                 }
             }
             .eraseToAnyPublisher()
@@ -47,7 +49,8 @@ public class SDImageStore: ObservableObject {
         imageWithURL url: String?,
         provider: SDImageProviding
     ) {
-        guard let url = url else {
+        guard let urlString = url,
+              let url = URL(string: urlString) else {
             return
         }
         
