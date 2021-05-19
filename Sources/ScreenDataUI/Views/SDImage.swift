@@ -8,8 +8,65 @@
 import SwiftUI
 import ScreenData
 
+import Combine
+import Task
+
+public protocol SDImageProviding {
+    func image(forURL url: String) -> AnyPublisher<UIImage?, Error>
+}
+
+public struct SDImageURLProvider: SDImageProviding {
+    public func image(forURL url: String) -> AnyPublisher<UIImage?, Error> {
+        Task.fetch(url: URL(string: url)!)
+            .flatMap { (data, response) in
+                Task.do {
+                    guard let data = data else {
+                        return nil
+                    }
+                    return UIImage(data: data)
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+}
+
+public protocol SDImageStoring {
+    func store(image: UIImage) -> AnyPublisher<Void, Error>
+}
+
+public class SDImageStore: ObservableObject {
+    @Published public var image: UIImage?
+    
+    private var task: AnyCancellable?
+    
+    deinit {
+        task?.cancel()
+    }
+    
+    public func load(
+        imageWithURL url: String?,
+        provider: SDImageProviding
+    ) {
+        guard let url = url else {
+            return
+        }
+        
+        task = provider.image(forURL: url)
+            .receive(on: DispatchQueue.main)
+            .sink(
+                .success { [weak self] image in
+                    self?.image = image
+                }
+            )
+    }
+}
+
 public struct SDImage: View {
     public static var defaultForegroundColor: Color?
+    public static var defaultImageProvider: SDImageProviding = SDImageURLProvider()
+    public static var defaultImageStorer: SDImageStoring!
+    
+    @StateObject private var store = SDImageStore()
     
     public var image: SomeImage
     private var progressTint: Color
@@ -31,20 +88,25 @@ public struct SDImage: View {
     }
     
     private var imageView: some View {
-        if let assetName = image.assetName,
-           let image = UIImage(named: assetName) {
-            return AnyView(Image(uiImage: image))
-        } else {
-            return AnyView(AsyncImage(
-                url: URL(string: image.url)!,
-                width: width,
-                height: height,
-                contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill
-            ) {
+        Group {
+            if let loadedImage = store.image {
+                Image(uiImage: loadedImage)
+                    .resizable()
+                    .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
+                    .frame(width: width ?? UIScreen.main.bounds.width, height: height, alignment: .center)
+            } else if let placeholderAssetName = image.assetName,
+                      let placeholder = UIImage(named: placeholderAssetName) {
+                Image(uiImage: placeholder)
+            } else {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: progressTint))
                     .padding()
-            })
+            }
+        }
+        .onAppear {
+            if store.image == nil {
+                store.load(imageWithURL: image.url, provider: SDImage.defaultImageProvider)
+            }
         }
     }
     
