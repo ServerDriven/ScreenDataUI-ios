@@ -8,6 +8,7 @@
 import SwiftUI
 import ScreenData
 import ScreenDataNavigation
+import Chronicle
 
 public typealias SDAction = () -> Void
 
@@ -58,14 +59,14 @@ public struct SDButton: View {
     }
     
     private func buttonAction() {
-        print("[SDButton] ActionID: \(String(describing: button.actionID)) & Destination: \(String(describing: button.destination))")
+        log(level: .info("[SDButton] ActionID: \(String(describing: button.actionID)) & Destination: \(String(describing: button.destination))"))
         if let actionID = button.actionID,
            let action = SDButton.actions[actionID] {
             action()
         }
         
         if let destination = button.destination {
-            print("Navigate to destination: (\(destination))")
+            log(level: .info("Navigate to destination: (\(destination))"))
             modalScreen = store.destinationView
         }
         

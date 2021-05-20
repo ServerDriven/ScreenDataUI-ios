@@ -9,6 +9,7 @@ import Foundation
 import ScreenData
 import ScreenDataNavigation
 import Combine
+import Chronicle
 
 public struct SDScreenStore: ScreenStoring {
     public static var `default`: ScreenStoring?
@@ -17,7 +18,7 @@ public struct SDScreenStore: ScreenStoring {
     
     public func store(screens: [SomeScreen]) -> AnyPublisher<Void, Error> {
         guard let store = SDScreenStore.default else {
-            print("[\(Data())] \(#function) SAVED Screens: \(screens.map(\.id))")
+            log(level: .info("SAVED Screens: \(screens.map(\.id))"))
             return ScreenDataNavigation.UserDefaultScreenStorer(baseKey: "SDScreenStore")
                 .store(screens: screens)
         }
