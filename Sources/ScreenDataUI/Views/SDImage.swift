@@ -7,9 +7,62 @@
 
 import SwiftUI
 import ScreenData
+import Combine
+import Task
+
+public class SDImageStore: ObservableObject {
+    @Published public var image: UIImage?
+    
+    private var task: AnyCancellable?
+    
+    deinit {
+        task?.cancel()
+    }
+    
+    public func load(
+        imageWithURL urlString: String,
+        provider: SDImageProviding,
+        storer: SDImageStoring?
+    ) {
+        var imageLoading: AnyPublisher<UIImage?, Error>
+        
+        guard let url = URL(string: urlString) else {
+            return
+        }
+        
+        defer {
+            task = imageLoading
+                .receive(on: DispatchQueue.main)
+                .sink(
+                    .success { [weak self] image in
+                        self?.image = image
+                    }
+                )
+        }
+        
+        guard let storer = storer else {
+            
+            imageLoading = provider.image(forURL: url)
+            return
+        }
+        
+        imageLoading = provider.image(forURL: url)
+            .flatMap { image in
+                storer.store(image: image, forURL: url)
+                    .map {
+                        image
+                    }
+            }
+            .eraseToAnyPublisher()
+    }
+}
 
 public struct SDImage: View {
     public static var defaultForegroundColor: Color?
+    public static var defaultImageProvider: SDImageProviding = SDImageURLProvider()
+    public static var defaultImageStorer: SDImageStoring? = nil
+    
+    @StateObject private var store = SDImageStore()
     
     public var image: SomeImage
     private var progressTint: Color
@@ -31,20 +84,29 @@ public struct SDImage: View {
     }
     
     private var imageView: some View {
-        if let assetName = image.assetName,
-           let image = UIImage(named: assetName) {
-            return AnyView(Image(uiImage: image))
-        } else {
-            return AnyView(AsyncImage(
-                url: URL(string: image.url)!,
-                width: width,
-                height: height,
-                contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill
-            ) {
+        Group {
+            if let placeholderAssetName = image.assetName,
+               let placeholder = UIImage(named: placeholderAssetName) {
+                Image(uiImage: placeholder)
+            } else if let loadedImage = store.image {
+                Image(uiImage: loadedImage)
+                    .resizable()
+                    .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
+                    .frame(width: width ?? UIScreen.main.bounds.width, height: height, alignment: .center)
+            } else {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: progressTint))
                     .padding()
-            })
+                    .onAppear {
+                        if store.image == nil {
+                            store.load(
+                                imageWithURL: image.url,
+                                provider: SDImage.defaultImageProvider,
+                                storer: SDImage.defaultImageStorer
+                            )
+                        }
+                    }
+            }
         }
     }
     
