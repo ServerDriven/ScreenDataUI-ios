@@ -22,32 +22,45 @@ public class SDImageStore: ObservableObject {
     public func load(
         imageWithURL urlString: String,
         provider: SDImageProviding,
-        storer: SDImageStoring
+        storer: SDImageStoring?
     ) {
+        var imageLoading: AnyPublisher<UIImage?, Error>
+        
         guard let url = URL(string: urlString) else {
             return
         }
         
-        task = provider.image(forURL: url)
+        defer {
+            task = imageLoading
+                .receive(on: DispatchQueue.main)
+                .sink(
+                    .success { [weak self] image in
+                        self?.image = image
+                    }
+                )
+        }
+        
+        guard let storer = storer else {
+            
+            imageLoading = provider.image(forURL: url)
+            return
+        }
+        
+        imageLoading = provider.image(forURL: url)
             .flatMap { image in
                 storer.store(image: image, forURL: url)
                     .map {
                         image
                     }
             }
-            .receive(on: DispatchQueue.main)
-            .sink(
-                .success { [weak self] image in
-                    self?.image = image
-                }
-            )
+            .eraseToAnyPublisher()
     }
 }
 
 public struct SDImage: View {
     public static var defaultForegroundColor: Color?
     public static var defaultImageProvider: SDImageProviding = SDImageURLProvider()
-    public static var defaultImageStorer: SDImageStoring = SDImageUserDefaultsStorer()
+    public static var defaultImageStorer: SDImageStoring? = nil
     
     @StateObject private var store = SDImageStore()
     
@@ -86,7 +99,11 @@ public struct SDImage: View {
                     .padding()
                     .onAppear {
                         if store.image == nil {
-                            store.load(imageWithURL: image.url, provider: SDImage.defaultImageProvider, storer: SDImageUserDefaultsStorer())
+                            store.load(
+                                imageWithURL: image.url,
+                                provider: SDImage.defaultImageProvider,
+                                storer: SDImage.defaultImageStorer
+                            )
                         }
                     }
             }
