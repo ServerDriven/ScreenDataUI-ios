@@ -26,12 +26,7 @@ public struct SDScreen: View, Equatable {
                         .store(screens: screens + [screen])
                 }
                 .sink(
-                    receiveCompletion: { _ in
-                        sema.signal()
-                    },
-                    receiveValue: { _ in
-                        
-                    }
+                    .completion { sema.signal() }
                 )
             
             sema.wait()
