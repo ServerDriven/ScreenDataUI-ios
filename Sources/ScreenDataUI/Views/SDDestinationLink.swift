@@ -27,8 +27,7 @@ public class SDDestinationStore: ObservableObject {
         task = provider.screen(forID: destination.toID)
             .receive(on: DispatchQueue.main)
             .sink(
-                receiveCompletion: { _ in },
-                receiveValue: { [weak self] (screen) in
+                .success { [weak self] (screen) in
                     guard screen != self?.destinationView?.screen else {
                         return
                     }
