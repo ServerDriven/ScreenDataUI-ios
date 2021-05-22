@@ -33,7 +33,6 @@ SDScreen(
 ```swift
 import ScreenDataNavigation
 
-func absurd<A>(_ never: Never) -> A { }
 struct ScreenProvider: ScreenProviding {
     func screen(forID id: String) -> AnyPublisher<SomeScreen, Error> {
         Just(
@@ -43,7 +42,7 @@ struct ScreenProvider: ScreenProviding {
                 someView: SomeLabel(title: "👋 \(id)", font: .largeTitle).someView
             )
         )
-        .mapError(absurd)
+        .mapError { Never -> Error in }
         .eraseToAnyPublisher()
     }
 }
@@ -53,8 +52,9 @@ struct ScreenProvider: ScreenProviding {
 
 ```swift
 class ScreenProviderStore: ObservableObject {
+    private var task: AnyCancellable?
+    
     @Published var screen: SomeScreen?
-    @Published private var task: AnyCancellable?
     
     func fetch(screenID id: String) {
         task = ScreenProvider().screen(forID: id)
