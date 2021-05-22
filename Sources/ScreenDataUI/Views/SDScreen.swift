@@ -21,7 +21,7 @@ public struct SDScreen: View, Equatable {
             let task = screen.load(withProvider: SDScreenProvider())
                 .map { screens in
                     SDScreenStore()
-                        .store(screens: screens)
+                        .store(screens: screens + [screen])
                 }
                 .eraseToAnyPublisher()
                 .sink(
