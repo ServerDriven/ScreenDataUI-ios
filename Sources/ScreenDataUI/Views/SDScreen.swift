@@ -9,8 +9,7 @@ import SwiftUI
 import ScreenData
 import Combine
 
-public struct SDScreen: View {
-    public let id = UUID()
+public struct SDScreen: View, Equatable {
     public var screen: SomeScreen
     
     public init(screen: SomeScreen) {
@@ -19,14 +18,14 @@ public struct SDScreen: View {
         DispatchQueue.global().async {
             let sema = DispatchSemaphore(value: 0)
             
-            let task = SDScreenStore()
-                .store(screens: [screen])
+            let task = screen.load(withProvider: SDScreenProvider())
+                .map { screens in
+                    SDScreenStore()
+                        .store(screens: screens + [screen])
+                }
+                .eraseToAnyPublisher()
                 .sink(
-                    receiveCompletion: { _ in },
-                    receiveValue: { _ in
-                        print("[\(Data())] \(#function) SAVED Screen: \(screen.id)")
-                        sema.signal()
-                    }
+                    .completion { sema.signal() }
                 )
             
             sema.wait()
@@ -54,5 +53,3 @@ public struct SDScreen: View {
         .navigationBarTitle(screen.title)
     }
 }
-
-extension SDScreen: Identifiable { }

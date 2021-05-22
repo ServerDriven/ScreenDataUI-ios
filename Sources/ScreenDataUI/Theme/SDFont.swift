@@ -12,7 +12,7 @@ import ScreenData
 public struct SDFont {
     public static var largeTitleFont: Font?
     public static var titleFont: Font?
-    public static var headlingFont: Font?
+    public static var headlineFont: Font?
     public static var bodyFont: Font?
     public static var footnoteFont: Font?
     public static var captionFont: Font?
@@ -24,7 +24,7 @@ public struct SDFont {
         case .title:
             return titleFont ?? .title
         case .headline:
-            return headlingFont ?? .headline
+            return headlineFont ?? .headline
         case .body:
             return bodyFont ?? .body
         case .footnote:
