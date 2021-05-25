@@ -35,14 +35,13 @@ public struct SDStyleModifier: ViewModifier {
                     .frame(width: 0, height: 0, alignment: .center)
             )
         } else {
-            log(level: .info("SD Style: \(style)"))
             return AnyView(
                 content
                     .padding(CGFloat(style.padding))
                     .background(
                         style.backgroundColor.map {
                             AnyView(SDColor(color: $0))
-                        } ?? AnyView(Color.clear)
+                        } ?? AnyView(Color.orange)
                     )
                     .cornerRadius(CGFloat(style.cornerRadius))
                     .foregroundColor(style.foregroundColor.map {
