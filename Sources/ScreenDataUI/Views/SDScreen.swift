@@ -47,11 +47,12 @@ public struct SDScreen: View, Equatable {
             }
         }
         .background(
-            Color(red: Double(screen.backgroundColor.red),
-                          green: Double(screen.backgroundColor.green),
-                          blue: Double(screen.backgroundColor.blue),
-                          opacity: Double(screen.backgroundColor.alpha))
-                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .center)
+            Color(
+                red: Double(screen.backgroundColor.red),
+                green: Double(screen.backgroundColor.green),
+                blue: Double(screen.backgroundColor.blue),
+                opacity: Double(screen.backgroundColor.alpha)
+            )
         )
         .navigationBarTitle(screen.title)
     }
