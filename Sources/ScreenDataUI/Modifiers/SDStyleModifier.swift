@@ -35,6 +35,7 @@ public struct SDStyleModifier: ViewModifier {
                     .frame(width: 0, height: 0, alignment: .center)
             )
         } else {
+            log(level: .info("SD Style: \(style)"))
             return AnyView(
                 content
                     .padding(CGFloat(style.padding))

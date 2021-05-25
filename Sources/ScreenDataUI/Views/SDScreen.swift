@@ -51,6 +51,5 @@ public struct SDScreen: View, Equatable {
                           blue: Double(screen.backgroundColor.blue),
                           opacity: Double(screen.backgroundColor.alpha)))
         .navigationBarTitle(screen.title)
-        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .center)
     }
 }
