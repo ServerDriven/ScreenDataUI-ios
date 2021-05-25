@@ -34,7 +34,7 @@ public struct SDContainerView: View {
         ScrollView(scrollAxis) {
             content
         }
-//        .background(with: container.style)
+        .background(with: container.style)
     }
     
     private var content: some View {
@@ -55,8 +55,7 @@ public struct SDContainerView: View {
         if container.isScrollable {
             scrollingView
         } else {
-            content
-//                .background(with: container.style)
+            content.background(with: container.style)
         }
     }
 }

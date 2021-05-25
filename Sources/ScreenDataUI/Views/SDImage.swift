@@ -93,6 +93,7 @@ public struct SDImage: View {
                     .resizable()
                     .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
                     .frame(width: width ?? UIScreen.main.bounds.width, height: height, alignment: .center)
+                    .clipped()
             } else {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: progressTint))
