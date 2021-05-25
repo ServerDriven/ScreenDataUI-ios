@@ -34,14 +34,32 @@ public struct SDStyleModifier: ViewModifier {
                     .hidden()
                     .frame(width: 0, height: 0, alignment: .center)
             )
-        } else {
+        } else if style.padding != 0 {
             return AnyView(
                 content
                     .padding(CGFloat(style.padding))
                     .background(
                         style.backgroundColor.map {
                             AnyView(SDColor(color: $0))
-                        } ?? AnyView(Color.orange)
+                        } ?? AnyView(Color.clear)
+                    )
+                    .cornerRadius(CGFloat(style.cornerRadius))
+                    .foregroundColor(style.foregroundColor.map {
+                        SDColor(color: $0).body as? Color
+                    } ?? Color.primary)
+                    .frame(
+                        width: width,
+                        height: height,
+                        alignment: .center
+                    )
+            )
+        } else {
+            return AnyView(
+                content
+                    .background(
+                        style.backgroundColor.map {
+                            AnyView(SDColor(color: $0))
+                        } ?? AnyView(Color.clear)
                     )
                     .cornerRadius(CGFloat(style.cornerRadius))
                     .foregroundColor(style.foregroundColor.map {
