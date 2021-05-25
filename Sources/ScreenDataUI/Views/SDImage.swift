@@ -89,15 +89,25 @@ public struct SDImage: View {
                let placeholder = UIImage(named: placeholderAssetName) {
                 Image(uiImage: placeholder)
             } else if let loadedImage = store.image {
-                Image(uiImage: loadedImage)
-                    .resizable()
-                    .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
-                    .frame(
-                        width: width > UIScreen.main.bounds.width ? UIScreen.main.bounds.width : width,
-                        height: height,
-                        alignment: .center
-                    )
-                    .clipped()
+                if width > UIScreen.main.bounds.width {
+                    Image(uiImage: loadedImage)
+                        .resizable()
+                        .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
+                        .frame(
+                            minWidth: 0, maxWidth: .infinity,
+                            minHeight: 0, maxHeight: height ?? .infinity,
+                            alignment: .center
+                        )
+                } else {
+                    Image(uiImage: loadedImage)
+                        .resizable()
+                        .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
+                        .frame(
+                            width: width,
+                            height: height,
+                            alignment: .center
+                        )
+                }
             } else {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: progressTint))
