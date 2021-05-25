@@ -97,6 +97,7 @@ public struct SDImage: View {
                         height: height,
                         alignment: .center
                     )
+                    .clipped()
             } else {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: progressTint))
