@@ -69,15 +69,19 @@ public struct SDImage: View {
     
     private var width: CGFloat {
         guard let width = image.style?.width else {
-            return UIScreen.main.bounds.width
+            return .infinity
+        }
+        
+        if CGFloat(width) >= UIScreen.main.bounds.width {
+            return .infinity
         }
         
         return CGFloat(width)
     }
     
-    private var height: CGFloat? {
+    private var height: CGFloat {
         guard let height = image.style?.height else {
-            return nil
+            return .infinity
         }
         
         return CGFloat(height)
@@ -89,25 +93,14 @@ public struct SDImage: View {
                let placeholder = UIImage(named: placeholderAssetName) {
                 Image(uiImage: placeholder)
             } else if let loadedImage = store.image {
-                if width > UIScreen.main.bounds.width {
-                    Image(uiImage: loadedImage)
-                        .resizable()
-                        .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
-                        .frame(
-                            minWidth: 0, maxWidth: .infinity,
-                            minHeight: 0, maxHeight: height ?? .infinity,
-                            alignment: .center
-                        )
-                } else {
-                    Image(uiImage: loadedImage)
-                        .resizable()
-                        .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
-                        .frame(
-                            width: width,
-                            height: height,
-                            alignment: .center
-                        )
-                }
+                Image(uiImage: loadedImage)
+                    .resizable()
+                    .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
+                    .frame(
+                        minWidth: 0, maxWidth: width,
+                        minHeight: 0, maxHeight: height,
+                        alignment: .center
+                    )
             } else {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: progressTint))
