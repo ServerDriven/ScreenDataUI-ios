@@ -46,10 +46,14 @@ public struct SDScreen: View, Equatable {
                 footerView.ui
             }
         }
-        .background(Color(red: Double(screen.backgroundColor.red),
-                          green: Double(screen.backgroundColor.green),
-                          blue: Double(screen.backgroundColor.blue),
-                          opacity: Double(screen.backgroundColor.alpha)))
+        .background(
+            Color(
+                red: Double(screen.backgroundColor.red),
+                green: Double(screen.backgroundColor.green),
+                blue: Double(screen.backgroundColor.blue),
+                opacity: Double(screen.backgroundColor.alpha)
+            )
+        )
         .navigationBarTitle(screen.title)
     }
 }

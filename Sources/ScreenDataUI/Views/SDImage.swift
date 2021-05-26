@@ -67,17 +67,21 @@ public struct SDImage: View {
     public var image: SomeImage
     private var progressTint: Color
     
-    private var width: CGFloat? {
+    private var width: CGFloat {
         guard let width = image.style?.width else {
-            return nil
+            return .infinity
+        }
+        
+        if CGFloat(width) >= UIScreen.main.bounds.width {
+            return .infinity
         }
         
         return CGFloat(width)
     }
     
-    private var height: CGFloat? {
+    private var height: CGFloat {
         guard let height = image.style?.height else {
-            return nil
+            return .infinity
         }
         
         return CGFloat(height)
@@ -92,7 +96,11 @@ public struct SDImage: View {
                 Image(uiImage: loadedImage)
                     .resizable()
                     .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
-                    .frame(width: width ?? UIScreen.main.bounds.width, height: height, alignment: .center)
+                    .frame(
+                        minWidth: 0, maxWidth: width,
+                        minHeight: 0, maxHeight: height,
+                        alignment: .center
+                    )
             } else {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: progressTint))
