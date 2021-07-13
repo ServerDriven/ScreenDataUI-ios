@@ -79,20 +79,16 @@ struct ScreenDataContentView: View {
     public var baseID: String
     
     var body: some View {
-        guard let screen = store.screen else {
-            return AnyView(
-                ProgressView()
-                    .onAppear {
-                        store.fetch(screenID: baseID)
-                    }
-            )
-        }
-        
-        return AnyView(
+        if let screen = store.screen {
             NavigationView {
                 SDScreen(screen: screen)
             }
-        )
+        } else {
+            ProgressView()
+                .onAppear {
+                    store.fetch(screenID: baseID)
+                }
+        }
     }
 }
 ```

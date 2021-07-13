@@ -9,28 +9,31 @@ import SwiftUI
 import ScreenData
 
 public extension SomeView {
+    
+    @ViewBuilder
     var ui: some View {
-        switch type {
-        case .button:
-            return AnyView(SDButton(button: someButton!))
-        case .label:
-            return AnyView(SDLabel(label: someLabel!))
-        case .text:
-            return AnyView(SDText(text: someText!))
-        case .container:
-            return AnyView(SDContainerView(container: someContainer!))
-        case .image:
-            return AnyView(SDImage(image: someImage!))
-        case .spacer:
-            guard let size = someSpacer?.size else {
-                return AnyView(Spacer())
+        if type == .button {
+            SDButton(button: someButton!)
+        } else if type == .label {
+            SDLabel(label: someLabel!)
+        } else if type == .text {
+            SDText(text: someText!)
+        } else if type == .container {
+            SDContainerView(container: someContainer!)
+        } else if type == .image {
+            SDImage(image: someImage!)
+        } else if type == .spacer {
+            if let size = someSpacer?.size {
+                Spacer().frame(width: CGFloat(size),
+                               height: CGFloat(size),
+                               alignment: .center)
+            } else {
+                Spacer()
             }
-            
-            return AnyView(Spacer().frame(width: CGFloat(size),
-                                          height: CGFloat(size),
-                                          alignment: .center))
-        case .custom:
-            return AnyView(SDCustomView(custom: someCustomView!))
+        } else if type == .custom {
+            SDCustomView(custom: someCustomView!)
+        } else {
+            EmptyView()
         }
     }
 }
