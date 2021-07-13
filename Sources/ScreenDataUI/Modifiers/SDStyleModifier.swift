@@ -38,13 +38,15 @@ public struct SDStyleModifier: ViewModifier {
                 .padding(CGFloat(style.padding))
                 .background(
                     style.backgroundColor.map {
-                        AnyView(SDColor(color: $0))
-                    } ?? AnyView(Color.clear)
+                        SDColor(color: $0)
+                    } ?? SDColor(color: SomeColor(red: 0, green: 0, blue: 0, alpha: 0))
                 )
                 .cornerRadius(CGFloat(style.cornerRadius))
-                .foregroundColor(style.foregroundColor.map {
-                    SDColor(color: $0).body as? Color
-                } ?? Color.primary)
+                .foregroundColor(
+                    style.foregroundColor.map {
+                        SDColor(color: $0).body as? Color
+                    } ?? Color.primary
+                )
                 .frame(
                     width: width,
                     height: height,
@@ -54,13 +56,15 @@ public struct SDStyleModifier: ViewModifier {
             content
                 .background(
                     style.backgroundColor.map {
-                        AnyView(SDColor(color: $0))
-                    } ?? AnyView(Color.clear)
+                        SDColor(color: $0)
+                    } ?? SDColor(color: SomeColor(red: 0, green: 0, blue: 0, alpha: 0))
                 )
                 .cornerRadius(CGFloat(style.cornerRadius))
-                .foregroundColor(style.foregroundColor.map {
-                    SDColor(color: $0).body as? Color
-                } ?? Color.primary)
+                .foregroundColor(
+                    style.foregroundColor.map {
+                        SDColor(color: $0).body as? Color
+                    } ?? Color.primary
+                )
                 .frame(
                     width: width,
                     height: height,
