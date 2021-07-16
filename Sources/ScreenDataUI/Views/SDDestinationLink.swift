@@ -63,57 +63,54 @@ public struct SDDestinationLink<Content>: View where Content: View {
     
     public var body: some View {
         if destination == nil {
-            return AnyView(content())
-        }
-        
-        guard destination?.type != .url else {
-            return AnyView(
-                Button(action: {
+            content()
+        } else if destination?.type == .url {
+            Button(
+                action: {
                     action?()
                     if let destinationURL = destination?.toID,
                        let url = URL(string: destinationURL) {
                         openURL(url)
                     }
-                }, label: {
+                },
+                label: {
                     content()
-                })
+                }
             )
-        }
-        
-        guard let destinationView = store.destinationView else {
-            return AnyView(loadingView)
-        }
-        
-        return AnyView(
+        } else if let destinationView = store.destinationView {
             NavigationLink(
                 destination: destinationView,
                 isActive: $isPresentingDestination,
                 label: {
-                    Button(action: {
-                        action?()
-                        isPresentingDestination = true
-                    }, label: {
-                        content()
-                    })
+                    Button(
+                        action: {
+                            action?()
+                            isPresentingDestination = true
+                        },
+                        label: {
+                            content()
+                        }
+                    )
                 }
             )
             .onAppear {
                 store.load(destination: destination, provider: provider)
             }
-        )
+        } else {
+            loadingView
+        }
     }
     
+    @ViewBuilder
     public var loadingView: some View {
-        guard let destination = destination else {
-            return AnyView(content())
-        }
-        
-        return AnyView(
+        if let destination = destination {
             ProgressView()
                 .onAppear {
                     store.load(destination: destination,
                                provider: provider)
                 }
-        )
+        } else {
+            content()
+        }
     }
 }

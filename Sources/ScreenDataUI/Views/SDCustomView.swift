@@ -27,15 +27,13 @@ public struct SDCustomView: View {
     }
     
     public var body: some View {
-        guard let id = custom.id,
-              let customView = SDCustomView.customViews[id] else {
-            return AnyView(
-                Text("404")
-                    .font(.title)
-                    .foregroundColor(.red)
-            )
+        if let id = custom.id,
+           let customView = SDCustomView.customViews[id] {
+            customView.view(forSomeCustomView: custom)
+        } else {
+            Text("404")
+                .font(.title)
+                .foregroundColor(.red)
         }
-        
-        return customView.view(forSomeCustomView: custom)
     }
 }

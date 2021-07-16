@@ -31,23 +31,10 @@ public struct SDButton: View {
     }
     
     public var body: some View {
-        guard button.destination != nil else {
-            return AnyView(
-                Button(
-                    action: buttonAction,
-                    label: {
-                        Text(button.title)
-                            .font(SDFont.font(for: .body))
-                            .background(with: button.style)
-                    }
-                )
-            )
-        }
-        
-        return AnyView(
+        if let destination = button.destination {
             SDDestinationLink(
                 provider: SDScreenProvider(),
-                destination: button.destination,
+                destination: destination,
                 action: buttonAction,
                 content: {
                     Text(button.title)
@@ -55,7 +42,16 @@ public struct SDButton: View {
                         .background(with: button.style)
                 }
             )
-        )
+        } else {
+            Button(
+                action: buttonAction,
+                label: {
+                    Text(button.title)
+                        .font(SDFont.font(for: .body))
+                        .background(with: button.style)
+                }
+            )
+        }
     }
     
     private func buttonAction() {
