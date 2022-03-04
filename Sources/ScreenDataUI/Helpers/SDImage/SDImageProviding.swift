@@ -29,8 +29,8 @@ public struct SDImageURLProvider: SDImageProviding {
                     }
                     
                     guard let data = data else {
-                        let error = SDImageProvidingFailure(description: "Could not load Image for URL (\(url)). Response: \(String(describing: response))")
-                        promise(.failure(error))
+                        log(level: .error("Could not load Image for URL (\(url)). Response: \(String(describing: response)).", nil))
+                        promise(.success(nil))
                         return
                     }
                     
@@ -52,8 +52,8 @@ public struct SDImageUserDefaultsProvider: SDImageProviding {
             )
             
             guard let data = imageData else {
-                let error = SDImageProvidingFailure(description: "Could not load Image for URL (\(url)).")
-                promise(.failure(error))
+                log(level: .error("Could not load Image for URL (\(url)).", nil))
+                promise(.success(nil))
                 return
             }
             
