@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 import ScreenData
 
 public struct SDFont {

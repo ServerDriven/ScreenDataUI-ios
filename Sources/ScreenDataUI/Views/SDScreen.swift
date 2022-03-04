@@ -25,7 +25,8 @@ public struct SDScreen: View, Equatable {
                 }
                 .eraseToAnyPublisher()
                 .sink(
-                    .completion { sema.signal() }
+                    receiveCompletion: { _ in sema.signal() },
+                    receiveValue: { _ in }
                 )
             
             sema.wait()

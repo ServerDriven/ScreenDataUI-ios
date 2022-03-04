@@ -8,7 +8,6 @@
 import SwiftUI
 import ScreenData
 import Combine
-import Task
 
 public class SDImageStore: ObservableObject {
     @Published public var image: UIImage?
@@ -34,7 +33,8 @@ public class SDImageStore: ObservableObject {
             task = imageLoading
                 .receive(on: DispatchQueue.main)
                 .sink(
-                    .success { [weak self] image in
+                    receiveCompletion: { _ in },
+                    receiveValue: { [weak self] image in
                         self?.image = image
                     }
                 )

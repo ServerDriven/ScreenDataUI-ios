@@ -8,28 +8,37 @@
 import Foundation
 import SwiftUI
 import Combine
-import Task
 
 public protocol SDImageProviding {
     func image(forURL url: URL) -> AnyPublisher<UIImage?, Error>
+}
+
+public struct SDImageProvidingFailure: Error {
+    public let description: String
 }
 
 public struct SDImageURLProvider: SDImageProviding {
     public init() { }
     
     public func image(forURL url: URL) -> AnyPublisher<UIImage?, Error> {
-        Task.fetch(url: url)
-            .flatMap { (data, response) in
-                Task.do {
-                    guard let data = data else {
-                        return nil
+        Future { promise in
+            URLSession.shared
+                .dataTask(with: url) { (data, response, error) in
+                    if let error = error {
+                        promise(.failure(error))
                     }
-                    let image = UIImage(data: data)
                     
-                    return image
+                    guard let data = data else {
+                        let error = SDImageProvidingFailure(description: "Could not load Image for URL (\(url)). Response: \(String(describing: response))")
+                        promise(.failure(error))
+                        return
+                    }
+                    
+                    promise(.success(UIImage(data: data)))
                 }
-            }
-            .eraseToAnyPublisher()
+                .resume()
+        }
+        .eraseToAnyPublisher()
     }
 }
 
@@ -37,16 +46,18 @@ public struct SDImageUserDefaultsProvider: SDImageProviding {
     public init() { }
     
     public func image(forURL url: URL) -> AnyPublisher<UIImage?, Error> {
-        Task.do {
-            let imageData: Data? = UserDefaults.standard.data(forKey: url.absoluteString)
+        Future { promise in
+            let imageData: Data? = UserDefaults.standard.data(
+                forKey: url.absoluteString
+            )
             
             guard let data = imageData else {
-                return nil
+                let error = SDImageProvidingFailure(description: "Could not load Image for URL (\(url)).")
+                promise(.failure(error))
+                return
             }
-            let image = UIImage(data: data)
             
-            return image
-            
+            promise(.success(UIImage(data: data)))
         }
         .eraseToAnyPublisher()
     }

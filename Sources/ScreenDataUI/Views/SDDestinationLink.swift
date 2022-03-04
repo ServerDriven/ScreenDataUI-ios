@@ -27,7 +27,8 @@ public class SDDestinationStore: ObservableObject {
         task = provider.screen(forID: destination.toID)
             .receive(on: DispatchQueue.main)
             .sink(
-                .success { [weak self] (screen) in
+                receiveCompletion: { _ in },
+                receiveValue: { [weak self] (screen) in
                     guard screen != self?.destinationView?.screen else {
                         return
                     }
@@ -93,9 +94,12 @@ public struct SDDestinationLink<Content>: View where Content: View {
                     )
                 }
             )
-            .onAppear {
-                store.load(destination: destination, provider: provider)
-            }
+                .onAppear {
+                    store.load(
+                        destination: destination,
+                        provider: provider
+                    )
+                }
         } else {
             loadingView
         }
@@ -106,8 +110,10 @@ public struct SDDestinationLink<Content>: View where Content: View {
         if let destination = destination {
             ProgressView()
                 .onAppear {
-                    store.load(destination: destination,
-                               provider: provider)
+                    store.load(
+                        destination: destination,
+                        provider: provider
+                    )
                 }
         } else {
             content()
