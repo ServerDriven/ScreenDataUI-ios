@@ -25,7 +25,12 @@ public struct SDScreen: View, Equatable {
                 }
                 .eraseToAnyPublisher()
                 .sink(
-                    receiveCompletion: { _ in sema.signal() },
+                    receiveCompletion: { completion in
+                        if case let .failure(error) = completion {
+                            log(level: .error("SDScreen.init -> SDScreenStore.store", error))
+                        }
+                        sema.signal()
+                    },
                     receiveValue: { _ in }
                 )
             
