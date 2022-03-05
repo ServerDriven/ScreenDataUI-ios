@@ -121,9 +121,9 @@ Before showing a `SDScreen` you can override the ScreenDataUI default values. Yo
 SDScreenProvider.default = ScreenProvider()
 
 // MARK: SDScreenStore default
-// UserDefaultScreenStorer is from ScreenDataNavigation
+// FileScreenStore is from ScreenDataNavigation
 
-SDScreenStore.default = UserDefaultScreenStorer(baseKey: "example")
+SDScreenStore.default = FileScreenStore(baseKey: "example")
 
 // MARK: SDCustomViews
 // Views that conform to SDCustomizedView

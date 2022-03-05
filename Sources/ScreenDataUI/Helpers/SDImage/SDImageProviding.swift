@@ -29,7 +29,7 @@ public struct SDImageURLProvider: SDImageProviding {
                     }
                     
                     guard let data = data else {
-                        log(level: .error("Could not load Image for URL (\(url)). Response: \(String(describing: response)).", nil))
+                        log(level: .error("(SDImageURLProvider) Could not load Image for URL (\(url)). Response: \(String(describing: response)).", nil))
                         promise(.success(nil))
                         return
                     }
@@ -42,17 +42,19 @@ public struct SDImageURLProvider: SDImageProviding {
     }
 }
 
-public struct SDImageUserDefaultsProvider: SDImageProviding {
+public struct SDImageFileProvider: SDImageProviding {
     public init() { }
     
     public func image(forURL url: URL) -> AnyPublisher<UIImage?, Error> {
         Future { promise in
-            let imageData: Data? = UserDefaults.standard.data(
-                forKey: url.absoluteString
-            )
+            let key = url.absoluteString.replacingOccurrences(of: "/", with: "-")
+            let path = FileManager.default.urls(
+                for: .documentDirectory,
+                   in: .userDomainMask
+            )[0].appendingPathComponent(key)
             
-            guard let data = imageData else {
-                log(level: .error("Could not load Image for URL (\(url)).", nil))
+            guard let data = try? Data(contentsOf: path) else {
+                log(level: .error("(SDImageFileProvider) Could not load Image from path (\(path.absoluteString)).", nil))
                 promise(.success(nil))
                 return
             }
@@ -63,11 +65,11 @@ public struct SDImageUserDefaultsProvider: SDImageProviding {
     }
 }
 
-public struct SDImageURLUserDefaultsProvider: SDImageProviding {
+public struct SDImageURLFileProvider: SDImageProviding {
     public init() { }
     
     public func image(forURL url: URL) -> AnyPublisher<UIImage?, Error> {
-        SDImageUserDefaultsProvider()
+        SDImageFileProvider()
             .image(forURL: url)
             .flatMap { image -> AnyPublisher<UIImage?, Error> in
                 guard let image = image else {
