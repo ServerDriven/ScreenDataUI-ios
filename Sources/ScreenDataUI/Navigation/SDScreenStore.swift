@@ -19,7 +19,7 @@ public struct SDScreenStore: ScreenStoring {
     public func store(screens: [SomeScreen]) -> AnyPublisher<Void, Error> {
         guard let store = SDScreenStore.default else {
             log(level: .info("Saving SomeScreens: \(screens.map(\.id))"))
-            return ScreenDataNavigation.UserDefaultScreenStorer(baseKey: "SDScreenStore")
+            return FileScreenStore(baseKey: "SDScreenStore")
                 .store(screens: screens)
         }
         

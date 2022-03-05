@@ -17,15 +17,9 @@ public struct SDScreenProvider: ScreenProviding {
     
     public func screen(forID id: String) -> AnyPublisher<SomeScreen, Error> {
         guard let provider = SDScreenProvider.default else {
-            return ScreenDataNavigation.MockScreenProvider(
-                mockScreen: SomeScreen(
-                    title: "Mock Screen",
-                    backgroundColor: SomeColor(red: 1, green: 1, blue: 1),
-                    someView: SomeText(title: "Set SDScreenProvider.default").someView
-                )
-            )
-            .screen(forID: id)
-            .eraseToAnyPublisher()
+            return FileScreenProvider(baseKey: "SDScreenStore")
+                .screen(forID: id)
+                .eraseToAnyPublisher()
         }
         
         return provider.screen(forID: id)
