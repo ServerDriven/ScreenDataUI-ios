@@ -54,7 +54,7 @@ public struct SDImageFileProvider: SDImageProviding {
             )[0].appendingPathComponent(key)
             
             guard let data = try? Data(contentsOf: path) else {
-                log(level: .error("(SDImageFileProvider) Could not load Image for URL (\(url)).", nil))
+                log(level: .error("(SDImageFileProvider) Could not load Image from path (\(path.absoluteString)).", nil))
                 promise(.success(nil))
                 return
             }
