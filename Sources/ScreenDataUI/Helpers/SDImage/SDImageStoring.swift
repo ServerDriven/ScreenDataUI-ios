@@ -22,7 +22,11 @@ public struct SDImageFileStore: SDImageStoring {
             let key = url.absoluteString.replacingOccurrences(of: "/", with: "-")
             
             if let imageData = image?.pngData() {
-                try? __.transput.file.out(imageData, filename: key)
+                do {
+                    try __.transput.file.out(imageData, filename: key)
+                } catch {
+                    log(level: .error("Error storing image for key (\(key))", error))
+                }
             }
             
             promise(.success(()))

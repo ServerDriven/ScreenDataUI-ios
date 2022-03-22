@@ -46,7 +46,7 @@ public struct SDImageFileProvider: SDImageProviding {
         Future { promise in
             let key = url.absoluteString.replacingOccurrences(of: "/", with: "-")
             
-            guard let data: Data = try? __.transput.file.in(filename: key) else {
+            guard let data = try? __.transput.file.data(filename: key) else {
                 log(level: .error("(SDImageFileProvider) Could not load Image for key (\(key)).", nil))
                 promise(.success(nil))
                 return
