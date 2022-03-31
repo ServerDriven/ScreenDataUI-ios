@@ -67,12 +67,20 @@ public struct SDImage: View {
     public var image: SomeImage
     private var progressTint: Color
     
+    private var screenWidth: CGFloat {
+        #if os(iOS)
+        UIScreen.main.bounds.width
+        #else
+        WKInterfaceDevice.current().screenBounds.width
+        #endif
+    }
+    
     private var width: CGFloat {
         guard let width = image.style?.width else {
             return .infinity
         }
         
-        if CGFloat(width) >= UIScreen.main.bounds.width {
+        if CGFloat(width) >= screenWidth {
             return .infinity
         }
         
