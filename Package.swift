@@ -6,19 +6,20 @@ import PackageDescription
 let package = Package(
     name: "ScreenDataUI",
     platforms: [
-        .iOS(.v14)
+        .iOS(.v14),
+        .watchOS(.v7)
     ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "ScreenDataUI",
-            targets: ["ScreenDataUI"]),
+            targets: ["ScreenDataUI"]
+        )
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
-        .package(name: "ScreenData", url: "https://github.com/ServerDriven/ScreenData-swift", from: "0.4.1"),
-        .package(name: "ScreenDataNavigation", url: "https://github.com/ServerDriven/ScreenDataNavigation-swift", from: "1.0.0"),
+        .package(url: "https://github.com/ServerDriven/ScreenData-swift", from: "0.4.1"),
+        .package(url: "https://github.com/ServerDriven/ScreenDataNavigation-swift", from: "1.1.0"),
         .package(url: "https://github.com/0xLeif/Chronicle", from: "0.2.3")
     ],
     targets: [
@@ -27,12 +28,14 @@ let package = Package(
         .target(
             name: "ScreenDataUI",
             dependencies: [
-                "ScreenData",
-                "ScreenDataNavigation",
-                "Chronicle"
-            ]),
+                .product(name: "ScreenData", package: "ScreenData-swift"),
+                .product(name: "ScreenDataNavigation", package: "ScreenDataNavigation-swift"),
+                .product(name: "Chronicle", package: "Chronicle")
+            ]
+        ),
         .testTarget(
             name: "ScreenDataUITests",
-            dependencies: ["ScreenDataUI"]),
+            dependencies: ["ScreenDataUI"]
+        )
     ]
 )

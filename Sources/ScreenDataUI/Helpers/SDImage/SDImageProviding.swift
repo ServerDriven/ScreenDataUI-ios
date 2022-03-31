@@ -5,6 +5,7 @@
 //  Created by Leif on 5/19/21.
 //
 
+import FLet
 import Foundation
 import SwiftUI
 import Combine
@@ -22,21 +23,17 @@ public struct SDImageURLProvider: SDImageProviding {
     
     public func image(forURL url: URL) -> AnyPublisher<UIImage?, Error> {
         Future { promise in
-            URLSession.shared
-                .dataTask(with: url) { (data, response, error) in
-                    if let error = error {
-                        promise(.failure(error))
-                    }
-                    
-                    guard let data = data else {
-                        log(level: .error("(SDImageURLProvider) Could not load Image for URL (\(url)). Response: \(String(describing: response)).", nil))
-                        promise(.success(nil))
-                        return
-                    }
-                    
+            __.transput.url.in(
+                url: url,
+                successHandler: { (data: Data, response) in
                     promise(.success(UIImage(data: data)))
+                },
+                errorHandler: { promise(.failure($0)) },
+                failureHandler: { response in
+                    log(level: .error("(SDImageURLProvider) Could not load Image for URL (\(url)). Response: \(String(describing: response)).", nil))
+                    promise(.success(nil))
                 }
-                .resume()
+            )
         }
         .eraseToAnyPublisher()
     }
@@ -48,13 +45,9 @@ public struct SDImageFileProvider: SDImageProviding {
     public func image(forURL url: URL) -> AnyPublisher<UIImage?, Error> {
         Future { promise in
             let key = url.absoluteString.replacingOccurrences(of: "/", with: "-")
-            let path = FileManager.default.urls(
-                for: .documentDirectory,
-                   in: .userDomainMask
-            )[0].appendingPathComponent(key)
             
-            guard let data = try? Data(contentsOf: path) else {
-                log(level: .error("(SDImageFileProvider) Could not load Image from path (\(path.absoluteString)).", nil))
+            guard let data = try? __.transput.file.data(filename: key) else {
+                log(level: .error("(SDImageFileProvider) Could not load Image for key (\(key)).", nil))
                 promise(.success(nil))
                 return
             }
