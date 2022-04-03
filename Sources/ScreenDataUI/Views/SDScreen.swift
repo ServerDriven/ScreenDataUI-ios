@@ -10,6 +10,8 @@ import ScreenData
 import Combine
 
 public struct SDScreen: View, Equatable {
+    public static var isDebugging: Bool = false
+    
     public var screen: SomeScreen
     
     public init(screen: SomeScreen) {

@@ -80,7 +80,7 @@ public struct SDDestinationLink<Content>: View where Content: View {
             )
         } else if let destinationView = store.destinationView {
             NavigationLink(
-                destination: destinationView,
+                destination: destination(forScreen: destinationView),
                 isActive: $isPresentingDestination,
                 label: {
                     Button(
@@ -117,6 +117,15 @@ public struct SDDestinationLink<Content>: View where Content: View {
                 }
         } else {
             content()
+        }
+    }
+    
+    @ViewBuilder
+    private func destination(forScreen screen: SDScreen) -> some View {
+        if SDScreen.isDebugging {
+            DebugSDScreen(screen: screen.screen)
+        } else {
+            screen
         }
     }
 }
