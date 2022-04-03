@@ -18,7 +18,7 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/ServerDriven/ScreenData-swift", from: "0.4.1"),
+        .package(url: "https://github.com/ServerDriven/ScreenData-swift", from: "0.4.2"),
         .package(url: "https://github.com/ServerDriven/ScreenDataNavigation-swift", from: "1.1.0"),
         .package(url: "https://github.com/0xLeif/Chronicle", from: "0.2.3")
     ],
