@@ -68,11 +68,11 @@ public struct SDImage: View {
     private var progressTint: Color
     
     private var screenWidth: CGFloat {
-        #if os(iOS)
+#if os(iOS)
         UIScreen.main.bounds.width
-        #else
+#else
         WKInterfaceDevice.current().screenBounds.width
-        #endif
+#endif
     }
     
     private var width: CGFloat {
@@ -99,16 +99,9 @@ public struct SDImage: View {
         Group {
             if let placeholderAssetName = image.assetName,
                let placeholder = UIImage(named: placeholderAssetName) {
-                Image(uiImage: placeholder)
+                styled(imageView: Image(uiImage: placeholder))
             } else if let loadedImage = store.image {
-                Image(uiImage: loadedImage)
-                    .resizable()
-                    .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
-                    .frame(
-                        minWidth: 0, maxWidth: width,
-                        minHeight: 0, maxHeight: height,
-                        alignment: .center
-                    )
+                styled(imageView: Image(uiImage: loadedImage))
             } else {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: progressTint))
@@ -145,5 +138,16 @@ public struct SDImage: View {
         SDDestinationLink(provider: SDScreenProvider(), destination: image.destination) {
             imageView
         }
+    }
+    
+    private func styled(imageView: Image) -> some View {
+        imageView
+            .resizable()
+            .aspectRatio(contentMode: image.aspectScale == ImageAspectScale.fit ? .fit : .fill)
+            .frame(
+                minWidth: 0, maxWidth: width,
+                minHeight: 0, maxHeight: height,
+                alignment: .center
+            )
     }
 }
