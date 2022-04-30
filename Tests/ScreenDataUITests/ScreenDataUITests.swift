@@ -1,12 +1,27 @@
+import t
 import XCTest
 @testable import ScreenDataUI
 
 final class ScreenDataUITests: XCTestCase {
     func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(SDColor(color: .init(red: 0, green: 255, blue: 0, alpha: 255)).color.green, 255)
+        XCTAssert(
+            t.suite(named: "Basic Color Test") {
+                try t.expect {
+                    try t.assert(
+                        SDColor(
+                            color: .init(
+                                red: 0,
+                                green: 1,
+                                blue: 0,
+                                alpha: 1
+                            )
+                        )
+                        .color.green,
+                        isEqualTo: 1
+                    )
+                }
+            }
+        )
     }
 
     static var allTests = [

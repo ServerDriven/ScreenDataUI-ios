@@ -28,7 +28,7 @@ struct DebugSDView: View {
             provider: MockScreenProvider(
                 mockScreen: SomeScreen(
                     title: "",
-                    backgroundColor: SomeColor(red: 0, green: 0, blue: 0),
+                    backgroundColor: view.style?.backgroundColor ?? SomeColor(red: 0, green: 0, blue: 0, alpha: 0),
                     someView: view
                 )
             ),
