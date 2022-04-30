@@ -36,4 +36,22 @@ public extension SomeView {
             EmptyView()
         }
     }
+    
+    var style: SomeStyle? {
+        if type == .button {
+            return someButton?.style
+        } else if type == .label {
+            return someLabel?.style
+        } else if type == .text {
+            return someText?.style
+        } else if type == .container {
+            return someContainer?.style
+        } else if type == .image {
+            return someImage?.style
+        } else if type == .custom {
+            return someCustomView?.style
+        } else {
+            return nil
+        }
+    }
 }
